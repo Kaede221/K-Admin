@@ -2,6 +2,9 @@ import { lazy, type ComponentType } from 'react';
 import type { RouteObject } from 'react-router-dom';
 import type { MenuItem } from '@/types/menu';
 
+// Use Vite's import.meta.glob for static analysis
+const modules = import.meta.glob('../views/**/*.tsx');
+
 /**
  * Dynamically load component with React.lazy
  * @param componentPath - Component path relative to views directory
@@ -11,8 +14,20 @@ export function loadComponent(componentPath: string): ComponentType<any> {
   // Remove leading slash if present
   const path = componentPath.startsWith('/') ? componentPath.slice(1) : componentPath;
   
+  // Construct the full module path
+  const modulePath = `../views/${path}`;
+  
+  // Find matching module
+  const moduleLoader = modules[modulePath] || modules[`${modulePath}.tsx`];
+  
+  if (!moduleLoader) {
+    console.error(`Component not found: ${modulePath}`);
+    // Return a fallback component
+    return lazy(() => Promise.resolve({ default: () => <div>Component not found: {path}</div> }));
+  }
+  
   // Dynamically import component from views directory
-  return lazy(() => import(`../views/${path}`));
+  return lazy(() => moduleLoader().then((mod: any) => ({ default: mod.default })));
 }
 
 /**
