@@ -3,7 +3,7 @@ package utils
 import (
 	"fmt"
 
-	"github.com/casbin/casbin/v2"
+	"github.com/casbin/casbin/v3"
 	"go.uber.org/zap"
 )
 

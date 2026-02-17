@@ -4,7 +4,7 @@ package main
 // These imports will be used throughout the project as we build out the features
 
 import (
-	_ "github.com/casbin/casbin/v2"
+	_ "github.com/casbin/casbin/v3"
 	_ "github.com/casbin/gorm-adapter/v3"
 	_ "github.com/golang-jwt/jwt/v5"
 	_ "github.com/spf13/viper"

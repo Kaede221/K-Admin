@@ -4,7 +4,7 @@ import (
 	"k-admin-system/global"
 	"k-admin-system/model/system"
 
-	"github.com/casbin/casbin/v2"
+	"github.com/casbin/casbin/v3"
 	gormadapter "github.com/casbin/gorm-adapter/v3"
 	"go.uber.org/zap"
 )

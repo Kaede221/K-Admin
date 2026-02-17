@@ -10,12 +10,12 @@ import (
 
 // RegisterTables 注册需要自动迁移的表
 func RegisterTables(db *gorm.DB) error {
-	// 注册系统模型
+	// 注册系统模型 - 注意顺序：先创建被引用的表，再创建引用它们的表
 	err := db.AutoMigrate(
-		&system.SysUser{},
-		&system.SysRole{},
-		&system.SysMenu{},
-		&system.SysCasbinRule{},
+		&system.SysRole{},       // 先创建角色表
+		&system.SysMenu{},       // 再创建菜单表
+		&system.SysUser{},       // 最后创建用户表（依赖角色表）
+		&system.SysCasbinRule{}, // Casbin 规则表
 	)
 	if err != nil {
 		global.Logger.Error("Failed to migrate tables", zap.Error(err))
