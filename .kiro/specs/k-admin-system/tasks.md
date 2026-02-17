@@ -11,96 +11,96 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
 ### Phase 1: Backend Foundation
 
 - [ ] 1. Set up backend project structure and core infrastructure
-  - [ ] 1.1 Initialize Go module and create directory structure (api, config, core, global, middleware, model, router, service, utils)
+  - [-] 1.1 Initialize Go module and create directory structure (api, config, core, global, middleware, model, router, service, utils)
     - Create main.go entry point
     - Set up go.mod with dependencies: gin, gorm, viper, zap, jwt-go, casbin
     - _Requirements: Project structure from PRD_
   
-  - [ ] 1.2 Implement configuration management using Viper
+  - [~] 1.2 Implement configuration management using Viper
     - Create config/config.go with structs for Server, Database, JWT, Redis, Logger
     - Implement config loading from YAML, JSON, and environment variables
     - Add validation for required fields
     - _Requirements: 12.2, 12.3, 12.4_
   
-  - [ ]* 1.3 Write property test for configuration management
+  - [~] 1.3 Write property test for configuration management
     - **Property 38: Configuration Source Priority**
     - **Property 39: Configuration Validation on Startup**
     - **Validates: Requirements 12.2, 12.4, 12.5**
   
-  - [ ] 1.4 Implement logging system using Zap and Lumberjack
+  - [~] 1.4 Implement logging system using Zap and Lumberjack
     - Create core/zap.go for logger initialization
     - Configure log levels, output destinations, and rotation
     - Implement structured logging helpers
     - _Requirements: 13.1, 13.2, 13.3, 13.7, 13.8_
   
-  - [ ]* 1.5 Write property tests for logging system
+  - [~] 1.5 Write property tests for logging system
     - **Property 40: Log Level Filtering**
     - **Property 43: Environment-Specific Log Output**
     - **Validates: Requirements 13.3, 13.7, 13.8**
 
 
 - [ ] 2. Set up database connection and base models
-  - [ ] 2.1 Implement database connection with Gorm
+  - [~] 2.1 Implement database connection with Gorm
     - Create core/gorm.go for database initialization
     - Configure connection pooling and reconnection logic
     - Implement slow query logging
     - _Requirements: 15.1, 15.2, 15.3, 15.4, 15.8_
   
-  - [ ]* 2.2 Write property tests for database connection
+  - [~] 2.2 Write property tests for database connection
     - **Property 44: Database Connection Pool Management**
     - **Property 45: Automatic Database Reconnection**
     - **Property 48: Slow Query Logging**
     - **Validates: Requirements 15.3, 15.4, 15.8**
   
-  - [ ] 2.3 Create base model and common structures
+  - [~] 2.3 Create base model and common structures
     - Define model/common/base.go with BaseModel (ID, CreatedAt, UpdatedAt, DeletedAt)
     - Define model/common/response.go with Response struct
     - Implement response helper functions (Ok, Fail, OkWithDetailed, FailWithCode)
     - _Requirements: 1.1, 1.4, 15.6_
   
-  - [ ]* 2.4 Write property test for unified response structure
+  - [~] 2.4 Write property test for unified response structure
     - **Property 1: Unified Response Structure**
     - **Validates: Requirements 1.1, 1.2, 1.3**
   
-  - [ ] 2.5 Implement database migration system
+  - [~] 2.5 Implement database migration system
     - Create initialization script for AutoMigrate
     - Add migration tracking
     - _Requirements: 15.5_
   
-  - [ ]* 2.6 Write property test for database migrations
+  - [~] 2.6 Write property test for database migrations
     - **Property 46: Database Migration Execution**
     - **Validates: Requirements 15.5**
 
 - [ ] 3. Implement authentication and JWT management
-  - [ ] 3.1 Create JWT utility functions
+  - [~] 3.1 Create JWT utility functions
     - Define utils/jwt.go with JWTClaims struct
     - Implement GenerateToken (access + refresh tokens)
     - Implement ParseToken and RefreshToken
     - Implement token blacklist functions using Redis
     - _Requirements: 2.1, 2.5, 2.7_
   
-  - [ ]* 3.2 Write property tests for JWT functionality
+  - [~] 3.2 Write property tests for JWT functionality
     - **Property 3: Token Generation and Refresh Cycle**
     - **Property 4: Token Blacklist Enforcement**
     - **Validates: Requirements 2.1, 2.5, 2.7**
   
-  - [ ] 3.3 Implement password hashing utilities
+  - [~] 3.3 Implement password hashing utilities
     - Create utils/hash.go with bcrypt functions
     - Implement HashPassword and CheckPassword
     - _Requirements: 2.2_
   
-  - [ ]* 3.4 Write property test for password encryption
+  - [~] 3.4 Write property test for password encryption
     - **Property 2: Password Encryption Round-Trip**
     - **Validates: Requirements 2.2**
   
-  - [ ] 3.5 Create JWT authentication middleware
+  - [~] 3.5 Create JWT authentication middleware
     - Implement middleware/jwt.go
     - Extract and validate tokens from Authorization header
     - Set user info in Gin context
     - Handle token expiration and blacklist checking
     - _Requirements: 2.3, 16.1_
   
-  - [ ]* 3.6 Write property test for JWT middleware
+  - [~] 3.6 Write property test for JWT middleware
     - **Property 49: JWT Middleware Token Validation**
     - **Validates: Requirements 16.1**
 
@@ -111,13 +111,13 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
 ### Phase 2: Core System Modules
 
 - [ ] 5. Implement User module (model, service, API, router)
-  - [ ] 5.1 Create User model and database table
+  - [~] 5.1 Create User model and database table
     - Define model/system/sys_user.go with SysUser struct
     - Include fields: username, password, nickname, header_img, phone, email, role_id, active
     - Add Gorm tags and JSON tags (exclude password from JSON)
     - _Requirements: 4.1, 4.7_
   
-  - [ ] 5.2 Implement User service layer
+  - [~] 5.2 Implement User service layer
     - Create service/system/user_service.go
     - Implement Login (validate credentials, generate tokens)
     - Implement CreateUser, UpdateUser, DeleteUser (soft delete), GetUserByID
@@ -125,7 +125,7 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Implement ChangePassword, ResetPassword, ToggleUserStatus
     - _Requirements: 4.2, 4.3, 4.4, 4.5, 4.6, 4.8_
   
-  - [ ]* 5.3 Write property tests for User service
+  - [~] 5.3 Write property tests for User service
     - **Property 9: User CRUD Consistency**
     - **Property 10: Password Field Masking**
     - **Property 11: Username Uniqueness Validation**
@@ -133,21 +133,21 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - **Property 47: Soft Delete Behavior**
     - **Validates: Requirements 4.2, 4.3, 4.4, 4.5, 4.6, 4.7, 4.8, 15.7**
   
-  - [ ] 5.4 Create User API controllers
+  - [~] 5.4 Create User API controllers
     - Create api/v1/system/user.go
     - Implement handlers: Login, CreateUser, UpdateUser, DeleteUser, GetUser, GetUserList
     - Implement ChangePassword, ResetPassword, ToggleStatus
     - Add Swagger annotations
     - _Requirements: 4.2, 4.3, 4.4, 4.5, 4.6, 14.3_
   
-  - [ ]* 5.5 Write unit tests for User API
+  - [~] 5.5 Write unit tests for User API
     - Test login with valid/invalid credentials
     - Test user creation with duplicate username
     - Test password masking in responses
     - Test pagination and filtering
     - _Requirements: 4.2, 4.6, 4.7, 4.8_
   
-  - [ ] 5.6 Register User routes
+  - [~] 5.6 Register User routes
     - Create router/system/user.go
     - Register routes with appropriate middleware
     - Public routes: /login
@@ -155,13 +155,13 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - _Requirements: 2.3_
 
 - [ ] 6. Implement Role module (model, service, API, router)
-  - [ ] 6.1 Create Role model and database table
+  - [~] 6.1 Create Role model and database table
     - Define model/system/sys_role.go with SysRole struct
     - Include fields: role_name, role_key, data_scope, sort, status, remark
     - Define many-to-many relationship with SysMenu
     - _Requirements: 5.1_
   
-  - [ ] 6.2 Implement Role service layer
+  - [~] 6.2 Implement Role service layer
     - Create service/system/role_service.go
     - Implement CreateRole, UpdateRole, DeleteRole, GetRoleByID, GetRoleList
     - Implement AssignMenus, GetRoleMenus
@@ -169,65 +169,65 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Add validation to prevent deleting roles with users
     - _Requirements: 5.2, 5.3, 5.4, 5.5, 5.6_
   
-  - [ ]* 6.3 Write property tests for Role service
+  - [~] 6.3 Write property tests for Role service
     - **Property 13: Role Deletion Protection**
     - **Property 14: Role Permission Assignment**
     - **Validates: Requirements 5.3, 5.4, 5.6**
   
-  - [ ] 6.4 Create Role API controllers
+  - [~] 6.4 Create Role API controllers
     - Create api/v1/system/role.go
     - Implement handlers: CreateRole, UpdateRole, DeleteRole, GetRole, GetRoleList
     - Implement AssignMenus, GetRoleMenus, AssignAPIs, GetRoleAPIs
     - Add Swagger annotations
     - _Requirements: 5.2, 5.3, 5.4, 5.5, 5.6, 14.3_
   
-  - [ ]* 6.5 Write unit tests for Role API
+  - [~] 6.5 Write unit tests for Role API
     - Test role creation and updates
     - Test role deletion with associated users
     - Test menu and API permission assignment
     - _Requirements: 5.2, 5.3, 5.4, 5.6_
   
-  - [ ] 6.6 Register Role routes
+  - [~] 6.6 Register Role routes
     - Create router/system/role.go
     - Register protected routes: /role/* (require JWT + admin permission)
     - _Requirements: 2.3, 3.4_
 
 
 - [ ] 7. Implement Menu module (model, service, API, router)
-  - [ ] 7.1 Create Menu model and database table
+  - [~] 7.1 Create Menu model and database table
     - Define model/system/sys_menu.go with SysMenu struct
     - Include fields: parent_id, path, name, component, sort, meta (JSON), btn_perms (JSON)
     - Define many-to-many relationship with SysRole
     - _Requirements: 6.1, 6.3_
   
-  - [ ] 7.2 Implement Menu service layer
+  - [~] 7.2 Implement Menu service layer
     - Create service/system/menu_service.go
     - Implement GetMenuTree (filter by role, build hierarchy)
     - Implement CreateMenu, UpdateMenu, DeleteMenu, GetMenuByID, GetAllMenus
     - Implement BuildMenuTree helper (recursive tree building)
     - _Requirements: 3.2, 6.2, 6.5, 6.6_
   
-  - [ ]* 7.3 Write property tests for Menu service
+  - [~] 7.3 Write property tests for Menu service
     - **Property 5: Menu Tree Authorization Filtering**
     - **Property 15: Menu Hierarchy Preservation**
     - **Property 16: Menu Metadata Serialization Round-Trip**
     - **Property 17: Hidden Menu Route Accessibility**
     - **Validates: Requirements 3.2, 6.2, 6.3, 6.6, 6.8**
   
-  - [ ] 7.4 Create Menu API controllers
+  - [~] 7.4 Create Menu API controllers
     - Create api/v1/system/menu.go
     - Implement handlers: GetMenuTree, CreateMenu, UpdateMenu, DeleteMenu, GetMenu, GetAllMenus
     - Add Swagger annotations
     - _Requirements: 3.2, 6.2, 6.5, 6.6, 14.3_
   
-  - [ ]* 7.5 Write unit tests for Menu API
+  - [~] 7.5 Write unit tests for Menu API
     - Test menu tree generation for different roles
     - Test menu hierarchy with nested structures
     - Test menu sorting
     - Test hidden menu handling
     - _Requirements: 3.2, 6.2, 6.6, 6.8_
   
-  - [ ] 7.6 Register Menu routes
+  - [~] 7.6 Register Menu routes
     - Create router/system/menu.go
     - Register protected routes: /menu/* (require JWT)
     - _Requirements: 2.3_
@@ -252,13 +252,13 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Return 403 for unauthorized requests
     - _Requirements: 3.4, 3.7, 16.2_
   
-  - [ ]* 8.4 Write property tests for Casbin authorization
+  - [ ] 8.4 Write property tests for Casbin authorization
     - **Property 7: API Authorization Enforcement**
     - **Property 8: Role Permission Inheritance**
     - **Property 50: Casbin Middleware Authorization**
     - **Validates: Requirements 3.7, 3.8, 16.2**
   
-  - [ ]* 8.5 Write unit tests for Casbin middleware
+  - [ ] 8.5 Write unit tests for Casbin middleware
     - Test authorized API access
     - Test unauthorized API access returns 403
     - Test role inheritance
@@ -270,7 +270,7 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Configure allowed origins, methods, headers
     - _Requirements: 16.3_
   
-  - [ ]* 9.2 Write property test for CORS middleware
+  - [ ] 9.2 Write property test for CORS middleware
     - **Property 51: CORS Header Configuration**
     - **Validates: Requirements 16.3**
   
@@ -280,7 +280,7 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Return 429 for rate limit exceeded
     - _Requirements: 16.4_
   
-  - [ ]* 9.4 Write property test for rate limiting
+  - [ ] 9.4 Write property test for rate limiting
     - **Property 52: Rate Limiting Enforcement**
     - **Validates: Requirements 16.4**
   
@@ -289,7 +289,7 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Log timestamp, method, path, status, latency, client IP
     - _Requirements: 13.4, 16.5_
   
-  - [ ]* 9.6 Write property test for request logging
+  - [ ] 9.6 Write property test for request logging
     - **Property 41: HTTP Request Logging Completeness**
     - **Validates: Requirements 13.4**
   
@@ -298,7 +298,7 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Catch panics, log with stack trace, return 500
     - _Requirements: 11.7, 16.6_
   
-  - [ ]* 9.8 Write property test for panic recovery
+  - [ ] 9.8 Write property test for panic recovery
     - **Property 36: Panic Recovery Without Crash**
     - **Property 37: Error Logging with Stack Traces**
     - **Validates: Requirements 11.7, 11.8, 16.6**
@@ -309,7 +309,7 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Implement route exclusion mechanism
     - _Requirements: 16.7, 16.8_
   
-  - [ ]* 9.10 Write property tests for middleware system
+  - [ ] 9.10 Write property tests for middleware system
     - **Property 53: Middleware Execution Order**
     - **Property 54: Middleware Route Exclusion**
     - **Validates: Requirements 16.7, 16.8**
@@ -331,7 +331,7 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Implement ValidateSQL (whitelist/blacklist dangerous commands)
     - _Requirements: 7.1, 7.2, 7.3, 7.4, 7.5, 7.7, 7.8, 7.9_
   
-  - [ ]* 11.2 Write property tests for DB Inspector
+  - [ ] 11.2 Write property tests for DB Inspector
     - **Property 18: Database Table Listing Completeness**
     - **Property 19: Table Schema Accuracy**
     - **Property 20: DB Inspector CRUD Operations**
@@ -348,7 +348,7 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Add Swagger annotations
     - _Requirements: 7.1, 7.2, 7.3, 7.4, 7.5, 7.7, 7.8, 14.3_
   
-  - [ ]* 11.4 Write unit tests for DB Inspector API
+  - [ ] 11.4 Write unit tests for DB Inspector API
     - Test table listing
     - Test schema inspection
     - Test CRUD operations
@@ -382,7 +382,7 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Implement CreateTable (create table from field definitions)
     - _Requirements: 8.2, 8.4, 8.5, 8.8, 8.9_
   
-  - [ ]* 12.3 Write property tests for Code Generator
+  - [ ] 12.3 Write property tests for Code Generator
     - **Property 24: Code Generator Metadata Extraction**
     - **Property 25: Backend Code Generation Completeness**
     - **Property 26: Frontend Code Generation Completeness**
@@ -396,7 +396,7 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Add Swagger annotations
     - _Requirements: 8.2, 8.4, 8.5, 8.8, 8.9, 14.3_
   
-  - [ ]* 12.5 Write unit tests for Code Generator API
+  - [ ] 12.5 Write unit tests for Code Generator API
     - Test metadata extraction
     - Test code generation for sample table
     - Test preview mode
@@ -422,7 +422,7 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Register Swagger UI route at /swagger/index.html
     - _Requirements: 14.1, 14.2_
   
-  - [ ]* 13.3 Write unit test for Swagger endpoint
+  - [ ] 13.3 Write unit test for Swagger endpoint
     - Test that /swagger/index.html returns 200
     - _Requirements: 14.2_
 
@@ -450,7 +450,7 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Display error notifications for failed responses
     - _Requirements: 11.2, 11.3, 11.4, 11.5_
   
-  - [ ]* 15.3 Write property tests for request client
+  - [ ] 15.3 Write property tests for request client
     - **Property 32: Authorization Header Injection**
     - **Property 33: Response Data Extraction**
     - **Property 34: Error Notification Display**
@@ -484,11 +484,11 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Add persistence for theme and tabs
     - _Requirements: 10.1, 10.2, 10.3_
   
-  - [ ]* 16.3 Write property test for theme persistence
+  - [ ] 16.3 Write property test for theme persistence
     - **Property 29: Theme Preference Persistence**
     - **Validates: Requirements 10.2**
   
-  - [ ]* 16.4 Write unit tests for stores
+  - [ ] 16.4 Write unit tests for stores
     - Test user login flow
     - Test token refresh
     - Test permission checking
@@ -539,11 +539,11 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Support fallback prop for unauthorized state
     - _Requirements: 3.6_
   
-  - [ ]* 19.2 Write property test for AuthButton
+  - [ ] 19.2 Write property test for AuthButton
     - **Property 55: AuthButton Permission Visibility**
     - **Validates: Requirements 3.6**
   
-  - [ ]* 19.3 Write unit tests for AuthButton
+  - [ ] 19.3 Write unit tests for AuthButton
     - Test button renders with permission
     - Test button hidden without permission
     - Test fallback rendering
@@ -557,11 +557,11 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Support actionRef for external control
     - _Requirements: 11.6_
   
-  - [ ]* 19.5 Write property test for ProTable loading state
+  - [ ] 19.5 Write property test for ProTable loading state
     - **Property 58: Loading State Automation**
     - **Validates: Requirements 11.6**
   
-  - [ ]* 19.6 Write unit tests for ProTable
+  - [ ] 19.6 Write unit tests for ProTable
     - Test table rendering with data
     - Test pagination
     - Test search and filtering
@@ -575,7 +575,7 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Persist theme preference
     - _Requirements: 10.1, 10.2_
   
-  - [ ]* 19.8 Write unit test for ThemeSwitch
+  - [ ] 19.8 Write unit test for ThemeSwitch
     - Test theme toggle
     - Test theme persistence
     - _Requirements: 10.1, 10.2_
@@ -588,12 +588,12 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Handle nested routes recursively
     - _Requirements: 3.3, 9.2, 9.3_
   
-  - [ ]* 20.2 Write property tests for route generation
+  - [ ] 20.2 Write property tests for route generation
     - **Property 6: Route Generation from Menu Tree**
     - **Property 56: Dynamic Component Loading**
     - **Validates: Requirements 3.3, 6.7, 9.2, 9.3**
   
-  - [ ]* 20.3 Write unit tests for route generator
+  - [ ] 20.3 Write unit tests for route generator
     - Test route generation from menu tree
     - Test nested route handling
     - Test component path mapping
@@ -607,7 +607,7 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Redirect to 403 for unauthorized routes
     - _Requirements: 9.6_
   
-  - [ ]* 20.5 Write unit test for route guards
+  - [ ] 20.5 Write unit test for route guards
     - Test redirect to login when not authenticated
     - Test redirect to 403 for unauthorized routes
     - _Requirements: 9.6_
@@ -628,11 +628,11 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Highlight active menu item
     - _Requirements: 6.5, 9.5_
   
-  - [ ]* 21.2 Write property test for sidebar rendering
+  - [ ] 21.2 Write property test for sidebar rendering
     - **Property 57: Sidebar Navigation Rendering**
     - **Validates: Requirements 6.5, 9.5**
   
-  - [ ]* 21.3 Write unit test for Sidebar
+  - [ ] 21.3 Write unit test for Sidebar
     - Test menu rendering from tree
     - Test menu item click navigation
     - Test sidebar collapse
@@ -653,12 +653,12 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Support tab refresh
     - _Requirements: 10.3, 10.4, 10.5, 10.6, 10.7_
   
-  - [ ]* 21.6 Write property tests for tabs system
+  - [ ] 21.6 Write property tests for tabs system
     - **Property 30: Tab State Preservation**
     - **Property 31: Tab Management Operations**
     - **Validates: Requirements 10.3, 10.4, 10.5, 10.6, 10.7**
   
-  - [ ]* 21.7 Write unit tests for Tabs
+  - [ ] 21.7 Write unit tests for Tabs
     - Test tab creation on navigation
     - Test tab switching preserves state
     - Test tab close operations
@@ -680,11 +680,11 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Log errors to console/error tracking
     - _Requirements: 11.9_
   
-  - [ ]* 22.2 Write property test for Error Boundary
+  - [ ] 22.2 Write property test for Error Boundary
     - **Property 59: React Error Boundary Catching**
     - **Validates: Requirements 11.9**
   
-  - [ ]* 22.3 Write unit test for Error Boundary
+  - [ ] 22.3 Write unit test for Error Boundary
     - Test error catching
     - Test fallback UI rendering
     - _Requirements: 11.9_
@@ -704,7 +704,7 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Redirect to dashboard on success
     - _Requirements: 2.1, 2.4_
   
-  - [ ]* 24.2 Write unit tests for Login page
+  - [ ] 24.2 Write unit tests for Login page
     - Test form validation
     - Test successful login flow
     - Test failed login error display
@@ -718,7 +718,7 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Add recent activity list
     - _Requirements: Dashboard feature_
   
-  - [ ]* 25.2 Write unit test for Dashboard
+  - [ ] 25.2 Write unit test for Dashboard
     - Test component rendering
     - Test data fetching
     - _Requirements: Dashboard feature_
@@ -739,7 +739,7 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Support create and edit modes
     - _Requirements: 4.2, 4.3_
   
-  - [ ]* 26.3 Write unit tests for User Management
+  - [ ] 26.3 Write unit tests for User Management
     - Test user list rendering
     - Test search and filtering
     - Test user creation
@@ -768,7 +768,7 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Support assigning menus and APIs to role
     - _Requirements: 5.3, 5.4_
   
-  - [ ]* 27.4 Write unit tests for Role Management
+  - [ ] 27.4 Write unit tests for Role Management
     - Test role list rendering
     - Test role creation
     - Test role editing
@@ -791,7 +791,7 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Support parent menu selection
     - _Requirements: 6.2, 6.3, 6.4_
   
-  - [ ]* 28.3 Write unit tests for Menu Management
+  - [ ] 28.3 Write unit tests for Menu Management
     - Test menu tree rendering
     - Test menu creation
     - Test menu editing
@@ -840,7 +840,7 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Add confirmation dialog for dangerous operations
     - _Requirements: 7.6, 7.7, 7.8, 7.9_
   
-  - [ ]* 30.6 Write unit tests for DB Inspector
+  - [ ] 30.6 Write unit tests for DB Inspector
     - Test table list rendering
     - Test schema viewer
     - Test data browser CRUD operations
@@ -888,7 +888,7 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Call create table API
     - _Requirements: 8.9_
   
-  - [ ]* 31.7 Write unit tests for Code Generator
+  - [ ] 31.7 Write unit tests for Code Generator
     - Test table selection
     - Test configuration form
     - Test code preview
@@ -915,7 +915,7 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Add button to return to home
     - _Requirements: 9.6_
   
-  - [ ]* 33.3 Write unit tests for error pages
+  - [ ] 33.3 Write unit tests for error pages
     - Test 404 page rendering
     - Test 403 page rendering
     - _Requirements: 9.6_
@@ -964,7 +964,7 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Configure service dependencies and networking
     - _Requirements: 17.3, 17.4, 17.7_
   
-  - [ ]* 35.4 Write unit tests for deployment configuration
+  - [ ] 35.4 Write unit tests for deployment configuration
     - Test that backend exposes port 8080
     - Test that frontend exposes port 80
     - Test health check endpoints
@@ -978,7 +978,7 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Return health status JSON
     - _Requirements: 17.6_
   
-  - [ ]* 36.2 Write unit test for health check
+  - [ ] 36.2 Write unit test for health check
     - Test health endpoint returns 200
     - Test health status includes database and Redis status
     - _Requirements: 17.6_
@@ -1007,13 +1007,13 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - _Requirements: Documentation_
 
 - [ ] 38. Final integration testing
-  - [ ]* 38.1 Run full test suite
+  - [ ] 38.1 Run full test suite
     - Execute all unit tests (backend + frontend)
     - Execute all property tests (backend + frontend)
     - Verify test coverage meets goals (80% backend, 75% frontend)
     - _Requirements: All testing requirements_
   
-  - [ ]* 38.2 Perform end-to-end integration tests
+  - [ ] 38.2 Perform end-to-end integration tests
     - Test complete user flows: login → navigate → CRUD operations
     - Test permission system: menu filtering, API authorization, button visibility
     - Test token refresh flow

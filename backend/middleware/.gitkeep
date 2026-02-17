@@ -1,0 +1,2 @@
+# Middleware components
+# This directory will contain JWT, Casbin, CORS, logging, and other middleware
