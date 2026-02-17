@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { navigateTo } from '@/utils/navigation';
 
 export interface TabItem {
   key: string;
@@ -71,8 +72,8 @@ export const useAppStore = create<AppState>()(
             tabs: newTabs,
             activeTab: lastTab.key,
           });
-          // Navigate to the last tab
-          window.location.href = lastTab.path;
+          // Navigate to the last tab using SPA navigation
+          navigateTo(lastTab.path);
         } else {
           set({ tabs: newTabs });
         }

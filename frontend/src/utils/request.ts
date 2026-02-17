@@ -5,6 +5,7 @@ import axios, {
   type AxiosError,
 } from "axios";
 import { getToken, setToken, getRefreshToken, removeToken, removeRefreshToken } from "./storage";
+import { navigateTo } from "./navigation";
 
 export interface UnifiedResponse<T = any> {
   code: number;
@@ -119,7 +120,7 @@ class RequestClient {
       // Refresh failed, redirect to login
       removeToken();
       removeRefreshToken();
-      window.location.href = "/login";
+      navigateTo("/login");
       return Promise.reject(refreshError);
     } finally {
       this.isRefreshing = false;

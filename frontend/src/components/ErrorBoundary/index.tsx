@@ -43,13 +43,12 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   }
 
   handleReload = () => {
-    // Reset error state and reload page
+    // Reset error state without reloading the page
     this.setState({
       hasError: false,
       error: null,
       errorInfo: null,
     });
-    window.location.reload();
   };
 
   render() {

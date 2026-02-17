@@ -1,12 +1,11 @@
-import { Tabs as AntTabs, Dropdown } from 'antd';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { Tag, Dropdown, Space } from 'antd';
+import { useNavigate } from 'react-router-dom';
 import { useAppStore, type TabItem } from '@/store/appStore';
 import type { MenuProps } from 'antd';
 import { ReloadOutlined, CloseOutlined } from '@ant-design/icons';
 
 export function Tabs() {
   const navigate = useNavigate();
-  const location = useLocation();
   const tabs = useAppStore((state) => state.tabs);
   const activeTab = useAppStore((state) => state.activeTab);
   const removeTab = useAppStore((state) => state.removeTab);
@@ -14,18 +13,16 @@ export function Tabs() {
   const closeOtherTabs = useAppStore((state) => state.closeOtherTabs);
   const refreshTab = useAppStore((state) => state.refreshTab);
 
-  // Handle tab change
-  const handleTabChange = (key: string) => {
-    setActiveTab(key);
-    const tab = tabs.find((t) => t.key === key);
-    if (tab) {
-      navigate(tab.path);
-    }
+  // Handle tab click
+  const handleTabClick = (tab: TabItem) => {
+    setActiveTab(tab.key);
+    navigate(tab.path);
   };
 
-  // Handle tab remove
-  const handleTabRemove = (targetKey: string) => {
-    removeTab(targetKey);
+  // Handle tab close
+  const handleTabClose = (e: React.MouseEvent, key: string) => {
+    e.stopPropagation();
+    removeTab(key);
   };
 
   // Context menu items
@@ -41,7 +38,7 @@ export function Tabs() {
       icon: <CloseOutlined />,
       label: '关闭',
       disabled: !tab.closable,
-      onClick: () => handleTabRemove(tab.key),
+      onClick: () => removeTab(tab.key),
     },
     {
       key: 'closeOthers',
@@ -50,34 +47,41 @@ export function Tabs() {
     },
   ];
 
-  // Convert tabs to Ant Design tab items
-  const tabItems = tabs.map((tab) => ({
-    key: tab.key,
-    label: (
-      <Dropdown
-        menu={{ items: getContextMenuItems(tab) }}
-        trigger={['contextMenu']}
-      >
-        <span>{tab.label}</span>
-      </Dropdown>
-    ),
-    closable: tab.closable,
-  }));
-
   return (
-    <AntTabs
-      type="editable-card"
-      activeKey={activeTab}
-      items={tabItems}
-      onChange={handleTabChange}
-      onEdit={(targetKey, action) => {
-        if (action === 'remove') {
-          handleTabRemove(targetKey as string);
-        }
+    <div
+      style={{
+        padding: '12px 16px',
+        background: '#f5f5f5',
+        borderBottom: '1px solid #e8e8e8',
       }}
-      hideAdd
-      style={{ marginBottom: 0 }}
-    />
+    >
+      <Space size={8}>
+        {tabs.map((tab) => (
+          <Dropdown
+            key={tab.key}
+            menu={{ items: getContextMenuItems(tab) }}
+            trigger={['contextMenu']}
+          >
+            <Tag
+              color={activeTab === tab.key ? 'blue' : 'default'}
+              closable={tab.closable}
+              onClose={(e) => handleTabClose(e, tab.key)}
+              onClick={() => handleTabClick(tab)}
+              style={{
+                cursor: 'pointer',
+                userSelect: 'none',
+                margin: 0,
+                padding: '4px 12px',
+                fontSize: '13px',
+                borderRadius: '16px',
+              }}
+            >
+              {tab.label}
+            </Tag>
+          </Dropdown>
+        ))}
+      </Space>
+    </div>
   );
 }
 

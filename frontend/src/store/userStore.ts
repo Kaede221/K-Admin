@@ -4,6 +4,7 @@ import type { UserInfo } from '@/types/user';
 import type { MenuItem } from '@/types/menu';
 import request from '@/utils/request';
 import { setToken, setRefreshToken, removeToken, removeRefreshToken, removeUserInfo } from '@/utils/storage';
+import { navigateTo } from '@/utils/navigation';
 
 interface UserState {
   userInfo: UserInfo | null;
@@ -71,8 +72,8 @@ export const useUserStore = create<UserState>()(
           menuTree: [],
         });
 
-        // Redirect to login
-        window.location.href = '/login';
+        // Redirect to login using SPA navigation
+        navigateTo('/login');
       },
 
       refreshAccessToken: async () => {

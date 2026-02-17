@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Form, Input, Button, Card, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useUserStore } from '@/store/userStore';
+import { useNavigate } from 'react-router-dom';
 
 interface LoginForm {
   username: string;
@@ -11,14 +12,18 @@ interface LoginForm {
 export function Login() {
   const [loading, setLoading] = useState(false);
   const login = useUserStore((state) => state.login);
+  const fetchUserMenu = useUserStore((state) => state.fetchUserMenu);
+  const navigate = useNavigate();
 
   const handleSubmit = async (values: LoginForm) => {
     setLoading(true);
     try {
       await login(values.username, values.password);
+      // Fetch user menu after successful login
+      await fetchUserMenu();
       message.success('登录成功');
-      // Use window.location to ensure router is recreated with new menu
-      window.location.href = '/dashboard';
+      // Use SPA navigation
+      navigate('/dashboard');
     } catch (error: any) {
       message.error(error.message || '登录失败');
     } finally {
