@@ -3,6 +3,7 @@ package global
 import (
 	"k-admin-system/config"
 
+	"github.com/casbin/casbin/v2"
 	"github.com/redis/go-redis/v9"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
@@ -21,4 +22,7 @@ var (
 
 	// RedisClient holds the global Redis client instance
 	RedisClient *redis.Client
+
+	// CasbinEnforcer holds the global Casbin enforcer instance
+	CasbinEnforcer *casbin.Enforcer
 )

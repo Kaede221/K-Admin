@@ -52,6 +52,13 @@ func main() {
 	}
 	global.RedisClient = redisClient
 
+	// Initialize Casbin enforcer
+	casbinEnforcer, err := core.InitCasbin()
+	if err != nil {
+		logger.Fatal("Failed to initialize Casbin", zap.Error(err))
+	}
+	global.CasbinEnforcer = casbinEnforcer
+
 	// Run database migrations
 	if err := core.AutoMigrate(); err != nil {
 		logger.Fatal("Failed to run database migrations", zap.Error(err))

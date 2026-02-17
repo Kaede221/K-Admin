@@ -15,6 +15,7 @@ func RegisterTables(db *gorm.DB) error {
 		&system.SysUser{},
 		&system.SysRole{},
 		&system.SysMenu{},
+		&system.SysCasbinRule{},
 	)
 	if err != nil {
 		global.Logger.Error("Failed to migrate tables", zap.Error(err))

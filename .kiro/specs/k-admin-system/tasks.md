@@ -233,83 +233,83 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - _Requirements: 2.3_
 
 - [ ] 8. Implement Casbin authorization system
-  - [ ] 8.1 Create Casbin model and adapter
+  - [x] 8.1 Create Casbin model and adapter
     - Define model/system/sys_casbin_rule.go
     - Create Casbin model configuration (RBAC with RESTful path matching)
     - Initialize Casbin enforcer with Gorm adapter
     - _Requirements: 3.4, 3.5_
   
-  - [ ] 8.2 Implement Casbin manager utility
+  - [x] 8.2 Implement Casbin manager utility
     - Create utils/casbin.go with CasbinManager
     - Implement Enforce, AddPolicy, RemovePolicy
     - Implement GetPoliciesForRole, UpdatePoliciesForRole
     - _Requirements: 3.4, 5.4_
   
-  - [ ] 8.3 Create Casbin authorization middleware
+  - [x] 8.3 Create Casbin authorization middleware
     - Implement middleware/casbin.go
     - Extract role from JWT claims
     - Check permission using Casbin enforcer
     - Return 403 for unauthorized requests
     - _Requirements: 3.4, 3.7, 16.2_
   
-  - [ ] 8.4 Write property tests for Casbin authorization
+  - [x] 8.4 Write property tests for Casbin authorization
     - **Property 7: API Authorization Enforcement**
     - **Property 8: Role Permission Inheritance**
     - **Property 50: Casbin Middleware Authorization**
     - **Validates: Requirements 3.7, 3.8, 16.2**
   
-  - [ ] 8.5 Write unit tests for Casbin middleware
+  - [x] 8.5 Write unit tests for Casbin middleware
     - Test authorized API access
     - Test unauthorized API access returns 403
     - Test role inheritance
     - _Requirements: 3.7, 3.8_
 
 - [ ] 9. Implement additional middleware components
-  - [ ] 9.1 Create CORS middleware
+  - [x] 9.1 Create CORS middleware
     - Implement middleware/cors.go
     - Configure allowed origins, methods, headers
     - _Requirements: 16.3_
   
-  - [ ] 9.2 Write property test for CORS middleware
+  - [x] 9.2 Write property test for CORS middleware
     - **Property 51: CORS Header Configuration**
     - **Validates: Requirements 16.3**
   
-  - [ ] 9.3 Create rate limiting middleware
+  - [x] 9.3 Create rate limiting middleware
     - Implement middleware/rate_limit.go
     - Use token bucket or sliding window algorithm
     - Return 429 for rate limit exceeded
     - _Requirements: 16.4_
   
-  - [ ] 9.4 Write property test for rate limiting
+  - [~] 9.4 Write property test for rate limiting
     - **Property 52: Rate Limiting Enforcement**
     - **Validates: Requirements 16.4**
   
-  - [ ] 9.5 Create request logging middleware
+  - [~] 9.5 Create request logging middleware
     - Implement middleware/logger.go
     - Log timestamp, method, path, status, latency, client IP
     - _Requirements: 13.4, 16.5_
   
-  - [ ] 9.6 Write property test for request logging
+  - [~] 9.6 Write property test for request logging
     - **Property 41: HTTP Request Logging Completeness**
     - **Validates: Requirements 13.4**
   
-  - [ ] 9.7 Create panic recovery middleware
+  - [~] 9.7 Create panic recovery middleware
     - Implement middleware/recovery.go
     - Catch panics, log with stack trace, return 500
     - _Requirements: 11.7, 16.6_
   
-  - [ ] 9.8 Write property test for panic recovery
+  - [~] 9.8 Write property test for panic recovery
     - **Property 36: Panic Recovery Without Crash**
     - **Property 37: Error Logging with Stack Traces**
     - **Validates: Requirements 11.7, 11.8, 16.6**
   
-  - [ ] 9.9 Configure middleware chain order
+  - [~] 9.9 Configure middleware chain order
     - Update main.go to register middleware in correct order
     - Order: Recovery → CORS → RateLimit → Logger → JWT → Casbin
     - Implement route exclusion mechanism
     - _Requirements: 16.7, 16.8_
   
-  - [ ] 9.10 Write property tests for middleware system
+  - [~] 9.10 Write property tests for middleware system
     - **Property 53: Middleware Execution Order**
     - **Property 54: Middleware Route Exclusion**
     - **Validates: Requirements 16.7, 16.8**

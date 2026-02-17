@@ -9,11 +9,13 @@ import (
 
 // Config holds all configuration for the application
 type Config struct {
-	Server   ServerConfig   `mapstructure:"server"`
-	Database DatabaseConfig `mapstructure:"database"`
-	JWT      JWTConfig      `mapstructure:"jwt"`
-	Redis    RedisConfig    `mapstructure:"redis"`
-	Logger   LoggerConfig   `mapstructure:"logger"`
+	Server    ServerConfig    `mapstructure:"server"`
+	Database  DatabaseConfig  `mapstructure:"database"`
+	JWT       JWTConfig       `mapstructure:"jwt"`
+	Redis     RedisConfig     `mapstructure:"redis"`
+	Logger    LoggerConfig    `mapstructure:"logger"`
+	CORS      CORSConfig      `mapstructure:"cors"`
+	RateLimit RateLimitConfig `mapstructure:"rate_limit"`
 }
 
 // ServerConfig holds server-related configuration
@@ -56,6 +58,24 @@ type LoggerConfig struct {
 	MaxAge     int    `mapstructure:"max_age"`     // days
 	MaxBackups int    `mapstructure:"max_backups"` // number of backups
 	Compress   bool   `mapstructure:"compress"`    // compress rotated files
+}
+
+// CORSConfig holds CORS configuration
+type CORSConfig struct {
+	AllowOrigins     []string `mapstructure:"allow_origins"`
+	AllowMethods     []string `mapstructure:"allow_methods"`
+	AllowHeaders     []string `mapstructure:"allow_headers"`
+	ExposeHeaders    []string `mapstructure:"expose_headers"`
+	AllowCredentials bool     `mapstructure:"allow_credentials"`
+	MaxAge           int      `mapstructure:"max_age"` // in seconds
+}
+
+// RateLimitConfig holds rate limiting configuration
+type RateLimitConfig struct {
+	Enabled  bool   `mapstructure:"enabled"`  // enable/disable rate limiting
+	Requests int    `mapstructure:"requests"` // number of requests allowed
+	Window   int    `mapstructure:"window"`   // time window in seconds
+	KeyFunc  string `mapstructure:"key_func"` // "ip" or "user" - how to identify clients
 }
 
 // LoadConfig loads configuration from file and environment variables
@@ -178,6 +198,34 @@ func validateConfig(config *Config) error {
 	}
 	if config.Logger.MaxBackups == 0 {
 		config.Logger.MaxBackups = 3
+	}
+
+	// Validate CORS config - set defaults if not specified
+	if len(config.CORS.AllowOrigins) == 0 {
+		config.CORS.AllowOrigins = []string{"*"} // default allow all origins
+	}
+	if len(config.CORS.AllowMethods) == 0 {
+		config.CORS.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"}
+	}
+	if len(config.CORS.AllowHeaders) == 0 {
+		config.CORS.AllowHeaders = []string{"Origin", "Content-Type", "Authorization", "Accept"}
+	}
+	if config.CORS.MaxAge == 0 {
+		config.CORS.MaxAge = 86400 // default 24 hours
+	}
+
+	// Validate RateLimit config - set defaults if not specified
+	if config.RateLimit.Requests == 0 {
+		config.RateLimit.Requests = 100 // default 100 requests
+	}
+	if config.RateLimit.Window == 0 {
+		config.RateLimit.Window = 60 // default 60 seconds (1 minute)
+	}
+	if config.RateLimit.KeyFunc == "" {
+		config.RateLimit.KeyFunc = "ip" // default to IP-based rate limiting
+	}
+	if config.RateLimit.KeyFunc != "ip" && config.RateLimit.KeyFunc != "user" {
+		return fmt.Errorf("rate_limit.key_func must be one of: ip, user")
 	}
 
 	return nil
