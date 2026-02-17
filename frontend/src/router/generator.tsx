@@ -14,14 +14,24 @@ export function loadComponent(componentPath: string): ComponentType<any> {
   // Remove leading slash if present
   const path = componentPath.startsWith('/') ? componentPath.slice(1) : componentPath;
   
-  // Construct the full module path
-  const modulePath = `../views/${path}`;
+  // Try multiple path variations
+  const possiblePaths = [
+    `../views/${path}`,
+    `../views/${path}.tsx`,
+    `../views/${path}/index.tsx`,
+  ];
   
   // Find matching module
-  const moduleLoader = modules[modulePath] || modules[`${modulePath}.tsx`];
+  let moduleLoader = null;
+  for (const modulePath of possiblePaths) {
+    if (modules[modulePath]) {
+      moduleLoader = modules[modulePath];
+      break;
+    }
+  }
   
   if (!moduleLoader) {
-    console.error(`Component not found: ${modulePath}`);
+    console.error(`Component not found for path: ${path}. Tried:`, possiblePaths);
     // Return a fallback component
     return lazy(() => Promise.resolve({ default: () => <div>Component not found: {path}</div> }));
   }
