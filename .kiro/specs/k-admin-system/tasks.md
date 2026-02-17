@@ -320,8 +320,8 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
 
 ### Phase 3: Advanced Backend Features
 
-- [ ] 11. Implement Database Inspector module
-  - [ ] 11.1 Create DB Inspector service layer
+- [-] 11. Implement Database Inspector module
+  - [x] 11.1 Create DB Inspector service layer
     - Create service/tools/db_inspector_service.go
     - Implement GetTables (list all tables in database)
     - Implement GetTableSchema (column info with types, keys, comments)
@@ -331,7 +331,7 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Implement ValidateSQL (whitelist/blacklist dangerous commands)
     - _Requirements: 7.1, 7.2, 7.3, 7.4, 7.5, 7.7, 7.8, 7.9_
   
-  - [ ] 11.2 Write property tests for DB Inspector
+  - [x] 11.2 Write property tests for DB Inspector
     - **Property 18: Database Table Listing Completeness**
     - **Property 19: Table Schema Accuracy**
     - **Property 20: DB Inspector CRUD Operations**
