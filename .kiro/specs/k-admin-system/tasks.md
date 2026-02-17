@@ -620,8 +620,8 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Add recent activity list
     - _Requirements: Dashboard feature_
 
-- [ ] 26. Implement User Management page
-  - [ ] 26.1 Create User list page
+- [x] 26. Implement User Management page
+  - [x] 26.1 Create User list page
     - Create views/system/user/index.tsx
     - Use ProTable component for user list
     - Add search form (username, phone, email, role, status)
@@ -629,49 +629,49 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Implement AuthButton for permission control
     - _Requirements: 4.2, 4.3, 4.4, 4.5, 4.6_
   
-  - [ ] 26.2 Create User form modal
+  - [x] 26.2 Create User form modal
     - Create views/system/user/components/UserModal.tsx
     - Design form with fields: username, password, nickname, phone, email, role, avatar
     - Add form validation
     - Support create and edit modes
     - _Requirements: 4.2, 4.3_
 
-- [ ] 27. Implement Role Management page
-  - [ ] 27.1 Create Role list page
+- [x] 27. Implement Role Management page
+  - [x] 27.1 Create Role list page
     - Create views/system/role/index.tsx
     - Use ProTable component for role list
     - Add action buttons: create, edit, delete, assign permissions
     - _Requirements: 5.2, 5.3, 5.4, 5.5, 5.6_
   
-  - [ ] 27.2 Create Role form modal
+  - [x] 27.2 Create Role form modal
     - Create views/system/role/components/RoleModal.tsx
     - Design form with fields: role_name, role_key, data_scope, sort, status, remark
     - Add form validation
     - _Requirements: 5.2, 5.5_
   
-  - [ ] 27.3 Create Permission assignment modal
+  - [x] 27.3 Create Permission assignment modal
     - Create views/system/role/components/PermissionModal.tsx
     - Display menu tree with checkboxes
     - Display API permission list
     - Support assigning menus and APIs to role
     - _Requirements: 5.3, 5.4_
 
-- [ ] 28. Implement Menu Management page
-  - [ ] 28.1 Create Menu list page
+- [x] 28. Implement Menu Management page
+  - [x] 28.1 Create Menu list page
     - Create views/system/menu/index.tsx
     - Display menu tree in table format
     - Add action buttons: create, edit, delete
     - Support expanding/collapsing tree nodes
     - _Requirements: 6.2, 6.5, 6.6_
   
-  - [ ] 28.2 Create Menu form modal
+  - [x] 28.2 Create Menu form modal
     - Create views/system/menu/components/MenuModal.tsx
     - Design form with fields: parent_id, path, name, component, sort, meta (icon, title, hidden, keep_alive), btn_perms
     - Add form validation
     - Support parent menu selection
     - _Requirements: 6.2, 6.3, 6.4_
 
-- [ ] 29. Checkpoint - Verify system management pages
+- [x] 29. Checkpoint - Verify system management pages
   - Ensure all tests pass, ask the user if questions arise.
 
 
