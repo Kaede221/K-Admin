@@ -105,6 +105,9 @@ export const useUserStore = create<UserState>()(
 
         const menuTree = await request.get<MenuItem[]>(`/menu/tree?role_id=${userInfo.roleId}`);
 
+        // Ensure menuTree is an array (handle null/undefined from backend)
+        const safeMenuTree = Array.isArray(menuTree) ? menuTree : [];
+
         // Extract button permissions from menu tree
         const permissions: string[] = [];
         const extractPermissions = (menus: MenuItem[]) => {
@@ -117,11 +120,11 @@ export const useUserStore = create<UserState>()(
             }
           });
         };
-        extractPermissions(menuTree);
+        extractPermissions(safeMenuTree);
 
         // Update store
         set({
-          menuTree,
+          menuTree: safeMenuTree,
           permissions,
         });
       },

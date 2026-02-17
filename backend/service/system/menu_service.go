@@ -150,7 +150,7 @@ func (s *MenuService) GetMenuTree(roleID uint) ([]system.SysMenu, error) {
 // BuildMenuTree 构建菜单树（递归）
 // parentID 为 0 表示根节点
 func (s *MenuService) BuildMenuTree(menus []system.SysMenu, parentID uint) []system.SysMenu {
-	var tree []system.SysMenu
+	tree := make([]system.SysMenu, 0) // 初始化为空数组而不是 nil
 
 	for _, menu := range menus {
 		if menu.ParentID == parentID {
@@ -169,7 +169,7 @@ func (s *MenuService) BuildMenuTree(menus []system.SysMenu, parentID uint) []sys
 // GetMenusByRoleIDs 根据多个角色ID获取菜单树（用于用户有多个角色的情况）
 func (s *MenuService) GetMenusByRoleIDs(roleIDs []uint) ([]system.SysMenu, error) {
 	if len(roleIDs) == 0 {
-		return []system.SysMenu{}, nil
+		return make([]system.SysMenu, 0), nil // 返回空数组而不是 nil
 	}
 
 	// 查询所有角色的菜单（去重）

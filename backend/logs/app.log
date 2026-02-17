@@ -81,3 +81,15 @@
 {"level":"info","timestamp":"2026-02-17T21:17:38.201+0800","caller":"core/migration.go:47","msg":"Initial data already exists, skipping initialization"}
 {"level":"info","timestamp":"2026-02-17T21:17:38.202+0800","caller":"backend/main.go:135","msg":"Server starting","port":":8080"}
 {"level":"fatal","timestamp":"2026-02-17T21:17:38.203+0800","caller":"backend/main.go:137","msg":"Failed to start server","error":"listen tcp :8080: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.","stacktrace":"main.main\n\tE:/WorkSpace/Personal/K-Admin/backend/main.go:137\nruntime.main\n\tC:/DevEnv/Go/src/runtime/proc.go:285"}
+{"level":"info","timestamp":"2026-02-17T21:17:41.436+0800","caller":"backend/main.go:62","msg":"Application starting","mode":"debug","port":":8080"}
+{"level":"info","timestamp":"2026-02-17T21:17:41.758+0800","caller":"core/gorm.go:58","msg":"Database connected successfully","host":"localhost","port":3306,"database":"k_admin","max_idle_conns":10,"max_open_conns":100}
+{"level":"info","timestamp":"2026-02-17T21:17:42.065+0800","caller":"core/redis.go:28","msg":"Redis connection established","host":"localhost","port":6379,"db":0}
+{"level":"info","timestamp":"2026-02-17T21:17:42.075+0800","caller":"core/casbin.go:40","msg":"Casbin enforcer initialized successfully"}
+{"level":"info","timestamp":"2026-02-17T21:17:42.076+0800","caller":"core/migration.go:99","msg":"Starting database migration..."}
+{"level":"info","timestamp":"2026-02-17T21:17:42.143+0800","caller":"core/migration.go:26","msg":"Database tables registered for migration"}
+{"level":"info","timestamp":"2026-02-17T21:17:42.143+0800","caller":"core/migration.go:107","msg":"Database migration completed successfully"}
+{"level":"info","timestamp":"2026-02-17T21:17:42.143+0800","caller":"core/migration.go:37","msg":"Checking if initial data needs to be created..."}
+{"level":"info","timestamp":"2026-02-17T21:17:42.143+0800","caller":"core/migration.go:47","msg":"Initial data already exists, skipping initialization"}
+{"level":"info","timestamp":"2026-02-17T21:17:42.145+0800","caller":"backend/main.go:135","msg":"Server starting","port":":8080"}
+{"level":"info","timestamp":"2026-02-17T21:17:50.541+0800","caller":"middleware/logger.go:53","msg":"HTTP Request","method":"POST","path":"/api/v1/user/login","status":200,"latency":0.0463681,"client_ip":"::1"}
+{"level":"info","timestamp":"2026-02-17T21:17:50.560+0800","caller":"middleware/logger.go:53","msg":"HTTP Request","method":"GET","path":"/api/v1/menu/tree","status":200,"latency":0.00116,"client_ip":"::1"}
