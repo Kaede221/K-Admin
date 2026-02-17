@@ -154,7 +154,7 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Protected routes: /user/* (require JWT)
     - _Requirements: 2.3_
 
-- [ ] 6. Implement Role module (model, service, API, router)
+- [x] 6. Implement Role module (model, service, API, router)
   - [x] 6.1 Create Role model and database table
     - Define model/system/sys_role.go with SysRole struct
     - Include fields: role_name, role_key, data_scope, sort, status, remark
@@ -174,20 +174,20 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - **Property 14: Role Permission Assignment**
     - **Validates: Requirements 5.3, 5.4, 5.6**
   
-  - [ ] 6.4 Create Role API controllers
+  - [x] 6.4 Create Role API controllers
     - Create api/v1/system/role.go
     - Implement handlers: CreateRole, UpdateRole, DeleteRole, GetRole, GetRoleList
     - Implement AssignMenus, GetRoleMenus, AssignAPIs, GetRoleAPIs
     - Add Swagger annotations
     - _Requirements: 5.2, 5.3, 5.4, 5.5, 5.6, 14.3_
   
-  - [ ] 6.5 Write unit tests for Role API
+  - [x] 6.5 Write unit tests for Role API
     - Test role creation and updates
     - Test role deletion with associated users
     - Test menu and API permission assignment
     - _Requirements: 5.2, 5.3, 5.4, 5.6_
   
-  - [ ] 6.6 Register Role routes
+  - [x] 6.6 Register Role routes
     - Create router/system/role.go
     - Register protected routes: /role/* (require JWT + admin permission)
     - _Requirements: 2.3, 3.4_
