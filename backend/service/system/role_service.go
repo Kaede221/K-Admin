@@ -15,9 +15,9 @@ type RoleService struct{}
 
 // CreateRole 创建角色
 func (s *RoleService) CreateRole(role *system.SysRole) error {
-	// 检查角色键是否已存在
+	// 检查角色键是否已存在（排除软删除的记录）
 	var count int64
-	if err := global.DB.Model(&system.SysRole{}).Where("role_key = ?", role.RoleKey).Count(&count).Error; err != nil {
+	if err := global.DB.Model(&system.SysRole{}).Where("role_key = ? AND deleted_at IS NULL", role.RoleKey).Count(&count).Error; err != nil {
 		return fmt.Errorf("failed to check role key uniqueness: %w", err)
 	}
 	if count > 0 {
@@ -43,11 +43,11 @@ func (s *RoleService) UpdateRole(role *system.SysRole) error {
 		return fmt.Errorf("failed to query role: %w", err)
 	}
 
-	// 如果更新角色键，检查新角色键是否已被其他角色使用
+	// 如果更新角色键，检查新角色键是否已被其他角色使用（排除软删除的记录）
 	if role.RoleKey != existingRole.RoleKey {
 		var count int64
 		if err := global.DB.Model(&system.SysRole{}).
-			Where("role_key = ? AND id != ?", role.RoleKey, role.ID).
+			Where("role_key = ? AND id != ? AND deleted_at IS NULL", role.RoleKey, role.ID).
 			Count(&count).Error; err != nil {
 			return fmt.Errorf("failed to check role key uniqueness: %w", err)
 		}

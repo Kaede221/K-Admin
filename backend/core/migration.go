@@ -44,7 +44,7 @@ func InitializeData() error {
 	}
 
 	if roleCount > 0 {
-		global.Logger.Info("Roles already exist, checking menu associations...")
+		global.Logger.Info("Roles already exist, checking menu associations and Casbin policies...")
 
 		// 检查管理员角色的菜单关联
 		var adminRole system.SysRole
@@ -53,7 +53,7 @@ func InitializeData() error {
 			return err
 		}
 
-		// 先检查数据库中是否有菜单
+		// 检查并修复菜单关联
 		var totalMenuCount int64
 		if err := global.DB.Model(&system.SysMenu{}).Count(&totalMenuCount).Error; err != nil {
 			global.Logger.Error("Failed to count total menus", zap.Error(err))
@@ -61,186 +61,33 @@ func InitializeData() error {
 		}
 		global.Logger.Info("Total menus in database", zap.Int64("count", totalMenuCount))
 
-		// 如果数据库中没有菜单，需要创建
 		if totalMenuCount == 0 {
 			global.Logger.Warn("No menus in database, creating default menus...")
-
-			// 创建默认菜单
-			menus := []system.SysMenu{
-				// 仪表盘
-				{
-					ParentID:  0,
-					Path:      "/dashboard",
-					Name:      "Dashboard",
-					Component: "dashboard",
-					Sort:      1,
-					Meta: system.MenuMeta{
-						Icon:      "HomeOutlined",
-						Title:     "仪表盘",
-						Hidden:    false,
-						KeepAlive: true,
-					},
-					BtnPerms: []string{},
-				},
-				// 系统管理
-				{
-					ParentID:  0,
-					Path:      "/system",
-					Name:      "System",
-					Component: "Layout",
-					Sort:      2,
-					Meta: system.MenuMeta{
-						Icon:      "SettingOutlined",
-						Title:     "系统管理",
-						Hidden:    false,
-						KeepAlive: true,
-					},
-					BtnPerms: []string{},
-				},
-				// 工具箱
-				{
-					ParentID:  0,
-					Path:      "/tools",
-					Name:      "Tools",
-					Component: "Layout",
-					Sort:      3,
-					Meta: system.MenuMeta{
-						Icon:      "ToolOutlined",
-						Title:     "工具箱",
-						Hidden:    false,
-						KeepAlive: true,
-					},
-					BtnPerms: []string{},
-				},
-			}
-
-			// 批量创建菜单
-			if err := global.DB.Create(&menus).Error; err != nil {
-				global.Logger.Error("Failed to create menus", zap.Error(err))
+			if err := createDefaultMenus(&adminRole); err != nil {
 				return err
 			}
-			global.Logger.Info("Default menus created", zap.Int("count", len(menus)))
-
-			// 获取父菜单ID
-			var systemMenu, toolsMenu system.SysMenu
-			global.DB.Where("name = ?", "System").First(&systemMenu)
-			global.DB.Where("name = ?", "Tools").First(&toolsMenu)
-
-			// 创建子菜单
-			subMenus := []system.SysMenu{
-				// 系统管理子菜单
-				{
-					ParentID:  systemMenu.ID,
-					Path:      "/system/user",
-					Name:      "User",
-					Component: "system/user",
-					Sort:      1,
-					Meta: system.MenuMeta{
-						Icon:      "UserOutlined",
-						Title:     "用户管理",
-						Hidden:    false,
-						KeepAlive: true,
-					},
-					BtnPerms: []string{"user:create", "user:update", "user:delete"},
-				},
-				{
-					ParentID:  systemMenu.ID,
-					Path:      "/system/role",
-					Name:      "Role",
-					Component: "system/role",
-					Sort:      2,
-					Meta: system.MenuMeta{
-						Icon:      "SafetyOutlined",
-						Title:     "角色管理",
-						Hidden:    false,
-						KeepAlive: true,
-					},
-					BtnPerms: []string{"role:create", "role:update", "role:delete"},
-				},
-				{
-					ParentID:  systemMenu.ID,
-					Path:      "/system/menu",
-					Name:      "Menu",
-					Component: "system/menu",
-					Sort:      3,
-					Meta: system.MenuMeta{
-						Icon:      "MenuOutlined",
-						Title:     "菜单管理",
-						Hidden:    false,
-						KeepAlive: true,
-					},
-					BtnPerms: []string{"menu:create", "menu:update", "menu:delete"},
-				},
-				// 工具箱子菜单
-				{
-					ParentID:  toolsMenu.ID,
-					Path:      "/tools/code-generator",
-					Name:      "CodeGenerator",
-					Component: "tools/code-generator",
-					Sort:      1,
-					Meta: system.MenuMeta{
-						Icon:      "CodeOutlined",
-						Title:     "代码生成器",
-						Hidden:    false,
-						KeepAlive: true,
-					},
-					BtnPerms: []string{"code:generate"},
-				},
-				{
-					ParentID:  toolsMenu.ID,
-					Path:      "/tools/db-inspector",
-					Name:      "DbInspector",
-					Component: "tools/db-inspector",
-					Sort:      2,
-					Meta: system.MenuMeta{
-						Icon:      "DatabaseOutlined",
-						Title:     "数据库检查器",
-						Hidden:    false,
-						KeepAlive: true,
-					},
-					BtnPerms: []string{"db:inspect"},
-				},
+		} else {
+			menuCount := global.DB.Model(&adminRole).Association("Menus").Count()
+			if menuCount == 0 {
+				global.Logger.Warn("Admin role has no menu associations, fixing...")
+				var allMenus []system.SysMenu
+				if err := global.DB.Find(&allMenus).Error; err != nil {
+					global.Logger.Error("Failed to find menus", zap.Error(err))
+					return err
+				}
+				if err := global.DB.Model(&adminRole).Association("Menus").Append(allMenus); err != nil {
+					global.Logger.Error("Failed to associate menus with admin role", zap.Error(err))
+					return err
+				}
+				global.Logger.Info("Fixed menu associations for admin role", zap.Int("menuCount", len(allMenus)))
+			} else {
+				global.Logger.Info("Admin role already has menu associations", zap.Int64("menuCount", menuCount))
 			}
-
-			// 批量创建子菜单
-			if err := global.DB.Create(&subMenus).Error; err != nil {
-				global.Logger.Error("Failed to create sub menus", zap.Error(err))
-				return err
-			}
-			global.Logger.Info("Default sub menus created", zap.Int("count", len(subMenus)))
-
-			// 将所有菜单关联到管理员角色
-			allMenus := append(menus, subMenus...)
-			if err := global.DB.Model(&adminRole).Association("Menus").Append(allMenus); err != nil {
-				global.Logger.Error("Failed to associate menus with admin role", zap.Error(err))
-				return err
-			}
-			global.Logger.Info("Menus associated with admin role", zap.Int("menuCount", len(allMenus)))
-
-			return nil
 		}
 
-		// 如果有菜单，检查角色是否有菜单关联
-		menuCount := global.DB.Model(&adminRole).Association("Menus").Count()
-
-		if menuCount == 0 {
-			global.Logger.Warn("Admin role has no menu associations, fixing...")
-
-			// 获取所有菜单
-			var allMenus []system.SysMenu
-			if err := global.DB.Find(&allMenus).Error; err != nil {
-				global.Logger.Error("Failed to find menus", zap.Error(err))
-				return err
-			}
-
-			// 关联所有菜单到管理员角色
-			if err := global.DB.Model(&adminRole).Association("Menus").Append(allMenus); err != nil {
-				global.Logger.Error("Failed to associate menus with admin role", zap.Error(err))
-				return err
-			}
-			global.Logger.Info("Fixed menu associations for admin role", zap.Int("menuCount", len(allMenus)))
-		} else {
-			global.Logger.Info("Admin role already has menu associations", zap.Int64("menuCount", menuCount))
+		// 检查并添加 Casbin 策略
+		if err := ensureAdminCasbinPolicies(); err != nil {
+			return err
 		}
 
 		return nil
@@ -283,6 +130,22 @@ func InitializeData() error {
 	}
 	global.Logger.Info("Admin user created", zap.Uint("userId", adminUser.ID))
 
+	// 创建默认菜单
+	if err := createDefaultMenus(adminRole); err != nil {
+		return err
+	}
+
+	// 添加 admin 角色的 Casbin 策略
+	if err := ensureAdminCasbinPolicies(); err != nil {
+		return err
+	}
+
+	global.Logger.Info("Initial data created successfully")
+	return nil
+}
+
+// createDefaultMenus 创建默认菜单并关联到角色
+func createDefaultMenus(adminRole *system.SysRole) error {
 	// 创建默认菜单
 	menus := []system.SysMenu{
 		// 仪表盘
@@ -435,7 +298,79 @@ func InitializeData() error {
 	}
 	global.Logger.Info("Menus associated with admin role", zap.Int("menuCount", len(allMenus)))
 
-	global.Logger.Info("Initial data created successfully")
+	return nil
+}
+
+// ensureAdminCasbinPolicies 确保 admin 角色拥有所有 API 访问权限
+func ensureAdminCasbinPolicies() error {
+	if global.CasbinEnforcer == nil {
+		global.Logger.Warn("Casbin enforcer is nil, skipping policy initialization")
+		return nil
+	}
+
+	// 检查 admin 角色是否已有策略
+	policies, err := global.CasbinEnforcer.GetFilteredPolicy(0, "admin")
+	if err != nil {
+		global.Logger.Error("Failed to get filtered policies", zap.Error(err))
+		return err
+	}
+
+	if len(policies) > 0 {
+		global.Logger.Info("Admin role already has Casbin policies", zap.Int("count", len(policies)))
+		return nil
+	}
+
+	global.Logger.Info("Adding Casbin policies for admin role...")
+
+	// 为 admin 角色添加所有 API 访问权限
+	// 使用通配符 * 表示允许访问所有路径和方法
+	adminPolicies := [][]string{
+		// 用户管理
+		{"admin", "/api/v1/user/list", "GET"},
+		{"admin", "/api/v1/user/:id", "GET"},
+		{"admin", "/api/v1/user", "POST"},
+		{"admin", "/api/v1/user/:id", "PUT"},
+		{"admin", "/api/v1/user/:id", "DELETE"},
+		{"admin", "/api/v1/user/:id/status", "PUT"},
+		{"admin", "/api/v1/user/reset-password", "POST"},
+
+		// 角色管理
+		{"admin", "/api/v1/role/list", "GET"},
+		{"admin", "/api/v1/role/:id", "GET"},
+		{"admin", "/api/v1/role", "POST"},
+		{"admin", "/api/v1/role/:id", "PUT"},
+		{"admin", "/api/v1/role/:id", "DELETE"},
+		{"admin", "/api/v1/role/assign-menus", "POST"},
+		{"admin", "/api/v1/role/:id/menus", "GET"},
+		{"admin", "/api/v1/role/assign-apis", "POST"},
+		{"admin", "/api/v1/role/:id/apis", "GET"},
+
+		// 菜单管理
+		{"admin", "/api/v1/menu/tree", "GET"},
+		{"admin", "/api/v1/menu/list", "GET"},
+		{"admin", "/api/v1/menu/:id", "GET"},
+		{"admin", "/api/v1/menu", "POST"},
+		{"admin", "/api/v1/menu/:id", "PUT"},
+		{"admin", "/api/v1/menu/:id", "DELETE"},
+
+		// 仪表盘
+		{"admin", "/api/v1/dashboard/stats", "GET"},
+
+		// 工具箱
+		{"admin", "/api/v1/tools/code-generator/tables", "GET"},
+		{"admin", "/api/v1/tools/code-generator/generate", "POST"},
+		{"admin", "/api/v1/tools/db-inspector/tables", "GET"},
+		{"admin", "/api/v1/tools/db-inspector/table/:tableName", "GET"},
+	}
+
+	// 批量添加策略
+	_, err = global.CasbinEnforcer.AddPolicies(adminPolicies)
+	if err != nil {
+		global.Logger.Error("Failed to add Casbin policies for admin", zap.Error(err))
+		return err
+	}
+
+	global.Logger.Info("Casbin policies added for admin role", zap.Int("count", len(adminPolicies)))
 	return nil
 }
 

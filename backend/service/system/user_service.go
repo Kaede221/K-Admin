@@ -119,11 +119,16 @@ func (s *UserService) UpdateUser(user *system.SysUser) error {
 func (s *UserService) DeleteUser(id uint) error {
 	// 检查用户是否存在
 	var user system.SysUser
-	if err := global.DB.First(&user, id).Error; err != nil {
+	if err := global.DB.Preload("Role").First(&user, id).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return errors.New("user not found")
 		}
 		return fmt.Errorf("failed to query user: %w", err)
+	}
+
+	// 防止删除超级管理员
+	if user.Role != nil && user.Role.RoleKey == "admin" {
+		return errors.New("cannot delete super administrator")
 	}
 
 	// 软删除用户
@@ -180,9 +185,9 @@ func (s *UserService) GetUserList(page, pageSize int, filters map[string]interfa
 		return nil, 0, fmt.Errorf("failed to count users: %w", err)
 	}
 
-	// 分页查询
+	// 分页查询，预加载角色信息
 	offset := (page - 1) * pageSize
-	if err := query.Offset(offset).Limit(pageSize).Order("id DESC").Find(&users).Error; err != nil {
+	if err := query.Preload("Role").Offset(offset).Limit(pageSize).Order("id DESC").Find(&users).Error; err != nil {
 		return nil, 0, fmt.Errorf("failed to query users: %w", err)
 	}
 
@@ -248,11 +253,16 @@ func (s *UserService) ResetPassword(userID uint, newPassword string) error {
 func (s *UserService) ToggleUserStatus(userID uint, active bool) error {
 	// 查询用户
 	var user system.SysUser
-	if err := global.DB.First(&user, userID).Error; err != nil {
+	if err := global.DB.Preload("Role").First(&user, userID).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return errors.New("user not found")
 		}
 		return fmt.Errorf("failed to query user: %w", err)
+	}
+
+	// 防止禁用超级管理员
+	if !active && user.Role != nil && user.Role.RoleKey == "admin" {
+		return errors.New("cannot disable super administrator")
 	}
 
 	// 更新状态

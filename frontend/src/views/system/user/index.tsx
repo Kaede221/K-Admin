@@ -1,9 +1,10 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { Button, Space, Tag, Input, Select, message, Modal } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined, KeyOutlined, PoweroffOutlined } from '@ant-design/icons';
 import { ProTable, type ProTableActionRef, type ProTableColumn } from '@/components/ProTable';
 import { AuthButton } from '@/components/Auth';
 import { getUserList, deleteUser, toggleUserStatus, resetPassword } from '@/api/user';
+import { getRoleList, type RoleInfo } from '@/api/role';
 import { formatDate } from '@/utils/format';
 import type { UserInfo } from '@/types/user';
 import UserModal from './components/UserModal';
@@ -12,6 +13,20 @@ export function UserManagement() {
   const actionRef = useRef<ProTableActionRef>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [editingUser, setEditingUser] = useState<UserInfo | undefined>();
+  const [roleList, setRoleList] = useState<RoleInfo[]>([]);
+
+  // Load role list for search filter
+  useEffect(() => {
+    const loadRoles = async () => {
+      try {
+        const result = await getRoleList({ page: 1, pageSize: 100 });
+        setRoleList(result.list);
+      } catch (error) {
+        console.error('Failed to load roles:', error);
+      }
+    };
+    loadRoles();
+  }, []);
 
   const handleCreate = () => {
     setEditingUser(undefined);
@@ -98,12 +113,15 @@ export function UserManagement() {
     },
     {
       title: '角色',
-      dataIndex: ['role', 'role_name'],
+      dataIndex: 'roleId',
+      render: (_, record) => record.role?.roleName || '-',
       renderFormItem: () => (
         <Select placeholder="请选择角色" allowClear>
-          {/* TODO: Load roles dynamically */}
-          <Select.Option value={1}>管理员</Select.Option>
-          <Select.Option value={2}>普通用户</Select.Option>
+          {roleList.map((role) => (
+            <Select.Option key={role.id} value={role.id}>
+              {role.roleName}
+            </Select.Option>
+          ))}
         </Select>
       ),
     },

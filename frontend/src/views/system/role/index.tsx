@@ -4,6 +4,7 @@ import { PlusOutlined, EditOutlined, DeleteOutlined, SafetyOutlined } from '@ant
 import { ProTable, type ProTableActionRef, type ProTableColumn } from '@/components/ProTable';
 import { AuthButton } from '@/components/Auth';
 import { getRoleList, deleteRole, type RoleInfo } from '@/api/role';
+import { formatDate } from '@/utils/format';
 import RoleModal from './components/RoleModal';
 import PermissionModal from './components/PermissionModal';
 
@@ -115,6 +116,7 @@ export function RoleManagement() {
       dataIndex: 'createdAt',
       width: 180,
       hideInSearch: true,
+      render: (createdAt: string) => formatDate(createdAt, 'YYYY-MM-DD'),
     },
     {
       title: '操作',
