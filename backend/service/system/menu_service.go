@@ -7,6 +7,7 @@ import (
 	"k-admin-system/global"
 	"k-admin-system/model/system"
 
+	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
 
@@ -123,11 +124,16 @@ func (s *MenuService) GetAllMenus() ([]system.SysMenu, error) {
 func (s *MenuService) GetMenuTree(roleID uint) ([]system.SysMenu, error) {
 	var menus []system.SysMenu
 
+	global.Logger.Info("GetMenuTree called",
+		zap.Uint("roleID", roleID))
+
 	if roleID == 0 {
 		// 获取所有菜单
 		if err := global.DB.Order("sort ASC, id ASC").Find(&menus).Error; err != nil {
 			return nil, fmt.Errorf("failed to query menus: %w", err)
 		}
+		global.Logger.Info("Fetched all menus",
+			zap.Int("count", len(menus)))
 	} else {
 		// 根据角色获取菜单
 		var role system.SysRole
@@ -135,15 +141,25 @@ func (s *MenuService) GetMenuTree(roleID uint) ([]system.SysMenu, error) {
 			return db.Order("sort ASC, id ASC")
 		}).First(&role, roleID).Error; err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
+				global.Logger.Error("Role not found", zap.Uint("roleID", roleID))
 				return nil, errors.New("role not found")
 			}
+			global.Logger.Error("Failed to query role",
+				zap.Uint("roleID", roleID),
+				zap.Error(err))
 			return nil, fmt.Errorf("failed to query role menus: %w", err)
 		}
 		menus = role.Menus
+		global.Logger.Info("Fetched role menus",
+			zap.Uint("roleID", roleID),
+			zap.String("roleName", role.RoleName),
+			zap.Int("menuCount", len(menus)))
 	}
 
 	// 构建树结构
 	tree := s.BuildMenuTree(menus, 0)
+	global.Logger.Info("Built menu tree",
+		zap.Int("treeNodeCount", len(tree)))
 	return tree, nil
 }
 

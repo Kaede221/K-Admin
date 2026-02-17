@@ -3,36 +3,38 @@ package system
 import (
 	"strconv"
 
+	"k-admin-system/global"
 	"k-admin-system/model/common"
 	"k-admin-system/model/system"
 	systemService "k-admin-system/service/system"
 
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 type MenuApi struct{}
 
 // CreateMenuRequest 创建菜单请求
 type CreateMenuRequest struct {
-	ParentID  uint   `json:"parentId"`
-	Path      string `json:"path" binding:"required"`
-	Name      string `json:"name" binding:"required"`
-	Component string `json:"component"`
-	Sort      int    `json:"sort"`
-	Meta      string `json:"meta"`
-	BtnPerms  string `json:"btnPerms"`
+	ParentID  uint            `json:"parentId"`
+	Path      string          `json:"path" binding:"required"`
+	Name      string          `json:"name" binding:"required"`
+	Component string          `json:"component"`
+	Sort      int             `json:"sort"`
+	Meta      system.MenuMeta `json:"meta"`
+	BtnPerms  []string        `json:"btnPerms"`
 }
 
 // UpdateMenuRequest 更新菜单请求
 type UpdateMenuRequest struct {
-	ID        uint   `json:"id" binding:"required"`
-	ParentID  uint   `json:"parentId"`
-	Path      string `json:"path" binding:"required"`
-	Name      string `json:"name" binding:"required"`
-	Component string `json:"component"`
-	Sort      int    `json:"sort"`
-	Meta      string `json:"meta"`
-	BtnPerms  string `json:"btnPerms"`
+	ID        uint            `json:"id" binding:"required"`
+	ParentID  uint            `json:"parentId"`
+	Path      string          `json:"path" binding:"required"`
+	Name      string          `json:"name" binding:"required"`
+	Component string          `json:"component"`
+	Sort      int             `json:"sort"`
+	Meta      system.MenuMeta `json:"meta"`
+	BtnPerms  []string        `json:"btnPerms"`
 }
 
 // GetMenuTreeRequest 获取菜单树请求
@@ -210,6 +212,11 @@ func (a *MenuApi) GetMenuTree(c *gin.Context) {
 		common.Fail(c, "invalid request parameters: "+err.Error())
 		return
 	}
+
+	// 记录请求参数
+	global.Logger.Info("GetMenuTree API called",
+		zap.Uint("roleID", req.RoleID),
+		zap.String("queryString", c.Request.URL.RawQuery))
 
 	menuService := systemService.MenuService{}
 	tree, err := menuService.GetMenuTree(req.RoleID)

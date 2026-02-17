@@ -83,7 +83,7 @@ export const getQueryParam = (param: string): string | null => {
  */
 export interface TreeNode {
   id: number;
-  parent_id: number;
+  parentId: number;
   children?: TreeNode[];
   [key: string]: any;
 }
@@ -93,7 +93,7 @@ export const buildTree = <T extends TreeNode>(
   parentId: number = 0
 ): T[] => {
   return items
-    .filter((item) => item.parent_id === parentId)
+    .filter((item) => item.parentId === parentId)
     .map((item) => ({
       ...item,
       children: buildTree(items, item.id),

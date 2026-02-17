@@ -44,7 +44,205 @@ func InitializeData() error {
 	}
 
 	if roleCount > 0 {
-		global.Logger.Info("Initial data already exists, skipping initialization")
+		global.Logger.Info("Roles already exist, checking menu associations...")
+
+		// 检查管理员角色的菜单关联
+		var adminRole system.SysRole
+		if err := global.DB.Where("role_key = ?", "admin").First(&adminRole).Error; err != nil {
+			global.Logger.Error("Failed to find admin role", zap.Error(err))
+			return err
+		}
+
+		// 先检查数据库中是否有菜单
+		var totalMenuCount int64
+		if err := global.DB.Model(&system.SysMenu{}).Count(&totalMenuCount).Error; err != nil {
+			global.Logger.Error("Failed to count total menus", zap.Error(err))
+			return err
+		}
+		global.Logger.Info("Total menus in database", zap.Int64("count", totalMenuCount))
+
+		// 如果数据库中没有菜单，需要创建
+		if totalMenuCount == 0 {
+			global.Logger.Warn("No menus in database, creating default menus...")
+
+			// 创建默认菜单
+			menus := []system.SysMenu{
+				// 仪表盘
+				{
+					ParentID:  0,
+					Path:      "/dashboard",
+					Name:      "Dashboard",
+					Component: "dashboard",
+					Sort:      1,
+					Meta: system.MenuMeta{
+						Icon:      "HomeOutlined",
+						Title:     "仪表盘",
+						Hidden:    false,
+						KeepAlive: true,
+					},
+					BtnPerms: []string{},
+				},
+				// 系统管理
+				{
+					ParentID:  0,
+					Path:      "/system",
+					Name:      "System",
+					Component: "Layout",
+					Sort:      2,
+					Meta: system.MenuMeta{
+						Icon:      "SettingOutlined",
+						Title:     "系统管理",
+						Hidden:    false,
+						KeepAlive: true,
+					},
+					BtnPerms: []string{},
+				},
+				// 工具箱
+				{
+					ParentID:  0,
+					Path:      "/tools",
+					Name:      "Tools",
+					Component: "Layout",
+					Sort:      3,
+					Meta: system.MenuMeta{
+						Icon:      "ToolOutlined",
+						Title:     "工具箱",
+						Hidden:    false,
+						KeepAlive: true,
+					},
+					BtnPerms: []string{},
+				},
+			}
+
+			// 批量创建菜单
+			if err := global.DB.Create(&menus).Error; err != nil {
+				global.Logger.Error("Failed to create menus", zap.Error(err))
+				return err
+			}
+			global.Logger.Info("Default menus created", zap.Int("count", len(menus)))
+
+			// 获取父菜单ID
+			var systemMenu, toolsMenu system.SysMenu
+			global.DB.Where("name = ?", "System").First(&systemMenu)
+			global.DB.Where("name = ?", "Tools").First(&toolsMenu)
+
+			// 创建子菜单
+			subMenus := []system.SysMenu{
+				// 系统管理子菜单
+				{
+					ParentID:  systemMenu.ID,
+					Path:      "/system/user",
+					Name:      "User",
+					Component: "system/user",
+					Sort:      1,
+					Meta: system.MenuMeta{
+						Icon:      "UserOutlined",
+						Title:     "用户管理",
+						Hidden:    false,
+						KeepAlive: true,
+					},
+					BtnPerms: []string{"user:create", "user:update", "user:delete"},
+				},
+				{
+					ParentID:  systemMenu.ID,
+					Path:      "/system/role",
+					Name:      "Role",
+					Component: "system/role",
+					Sort:      2,
+					Meta: system.MenuMeta{
+						Icon:      "SafetyOutlined",
+						Title:     "角色管理",
+						Hidden:    false,
+						KeepAlive: true,
+					},
+					BtnPerms: []string{"role:create", "role:update", "role:delete"},
+				},
+				{
+					ParentID:  systemMenu.ID,
+					Path:      "/system/menu",
+					Name:      "Menu",
+					Component: "system/menu",
+					Sort:      3,
+					Meta: system.MenuMeta{
+						Icon:      "MenuOutlined",
+						Title:     "菜单管理",
+						Hidden:    false,
+						KeepAlive: true,
+					},
+					BtnPerms: []string{"menu:create", "menu:update", "menu:delete"},
+				},
+				// 工具箱子菜单
+				{
+					ParentID:  toolsMenu.ID,
+					Path:      "/tools/code-generator",
+					Name:      "CodeGenerator",
+					Component: "tools/code-generator",
+					Sort:      1,
+					Meta: system.MenuMeta{
+						Icon:      "CodeOutlined",
+						Title:     "代码生成器",
+						Hidden:    false,
+						KeepAlive: true,
+					},
+					BtnPerms: []string{"code:generate"},
+				},
+				{
+					ParentID:  toolsMenu.ID,
+					Path:      "/tools/db-inspector",
+					Name:      "DbInspector",
+					Component: "tools/db-inspector",
+					Sort:      2,
+					Meta: system.MenuMeta{
+						Icon:      "DatabaseOutlined",
+						Title:     "数据库检查器",
+						Hidden:    false,
+						KeepAlive: true,
+					},
+					BtnPerms: []string{"db:inspect"},
+				},
+			}
+
+			// 批量创建子菜单
+			if err := global.DB.Create(&subMenus).Error; err != nil {
+				global.Logger.Error("Failed to create sub menus", zap.Error(err))
+				return err
+			}
+			global.Logger.Info("Default sub menus created", zap.Int("count", len(subMenus)))
+
+			// 将所有菜单关联到管理员角色
+			allMenus := append(menus, subMenus...)
+			if err := global.DB.Model(&adminRole).Association("Menus").Append(allMenus); err != nil {
+				global.Logger.Error("Failed to associate menus with admin role", zap.Error(err))
+				return err
+			}
+			global.Logger.Info("Menus associated with admin role", zap.Int("menuCount", len(allMenus)))
+
+			return nil
+		}
+
+		// 如果有菜单，检查角色是否有菜单关联
+		menuCount := global.DB.Model(&adminRole).Association("Menus").Count()
+
+		if menuCount == 0 {
+			global.Logger.Warn("Admin role has no menu associations, fixing...")
+
+			// 获取所有菜单
+			var allMenus []system.SysMenu
+			if err := global.DB.Find(&allMenus).Error; err != nil {
+				global.Logger.Error("Failed to find menus", zap.Error(err))
+				return err
+			}
+
+			// 关联所有菜单到管理员角色
+			if err := global.DB.Model(&adminRole).Association("Menus").Append(allMenus); err != nil {
+				global.Logger.Error("Failed to associate menus with admin role", zap.Error(err))
+				return err
+			}
+			global.Logger.Info("Fixed menu associations for admin role", zap.Int("menuCount", len(allMenus)))
+		} else {
+			global.Logger.Info("Admin role already has menu associations", zap.Int64("menuCount", menuCount))
+		}
+
 		return nil
 	}
 
@@ -94,8 +292,13 @@ func InitializeData() error {
 			Name:      "Dashboard",
 			Component: "dashboard",
 			Sort:      1,
-			Meta:      `{"icon":"HomeIcon","title":"仪表盘","hidden":false,"keep_alive":true}`,
-			BtnPerms:  `[]`,
+			Meta: system.MenuMeta{
+				Icon:      "HomeOutlined",
+				Title:     "仪表盘",
+				Hidden:    false,
+				KeepAlive: true,
+			},
+			BtnPerms: []string{},
 		},
 		// 系统管理
 		{
@@ -104,8 +307,13 @@ func InitializeData() error {
 			Name:      "System",
 			Component: "Layout",
 			Sort:      2,
-			Meta:      `{"icon":"CogIcon","title":"系统管理","hidden":false,"keep_alive":true}`,
-			BtnPerms:  `[]`,
+			Meta: system.MenuMeta{
+				Icon:      "SettingOutlined",
+				Title:     "系统管理",
+				Hidden:    false,
+				KeepAlive: true,
+			},
+			BtnPerms: []string{},
 		},
 		// 工具箱
 		{
@@ -114,8 +322,13 @@ func InitializeData() error {
 			Name:      "Tools",
 			Component: "Layout",
 			Sort:      3,
-			Meta:      `{"icon":"WrenchIcon","title":"工具箱","hidden":false,"keep_alive":true}`,
-			BtnPerms:  `[]`,
+			Meta: system.MenuMeta{
+				Icon:      "ToolOutlined",
+				Title:     "工具箱",
+				Hidden:    false,
+				KeepAlive: true,
+			},
+			BtnPerms: []string{},
 		},
 	}
 
@@ -140,8 +353,13 @@ func InitializeData() error {
 			Name:      "User",
 			Component: "system/user",
 			Sort:      1,
-			Meta:      `{"icon":"UserIcon","title":"用户管理","hidden":false,"keep_alive":true}`,
-			BtnPerms:  `["user:create","user:update","user:delete"]`,
+			Meta: system.MenuMeta{
+				Icon:      "UserOutlined",
+				Title:     "用户管理",
+				Hidden:    false,
+				KeepAlive: true,
+			},
+			BtnPerms: []string{"user:create", "user:update", "user:delete"},
 		},
 		{
 			ParentID:  systemMenu.ID,
@@ -149,8 +367,13 @@ func InitializeData() error {
 			Name:      "Role",
 			Component: "system/role",
 			Sort:      2,
-			Meta:      `{"icon":"ShieldCheckIcon","title":"角色管理","hidden":false,"keep_alive":true}`,
-			BtnPerms:  `["role:create","role:update","role:delete"]`,
+			Meta: system.MenuMeta{
+				Icon:      "SafetyOutlined",
+				Title:     "角色管理",
+				Hidden:    false,
+				KeepAlive: true,
+			},
+			BtnPerms: []string{"role:create", "role:update", "role:delete"},
 		},
 		{
 			ParentID:  systemMenu.ID,
@@ -158,8 +381,13 @@ func InitializeData() error {
 			Name:      "Menu",
 			Component: "system/menu",
 			Sort:      3,
-			Meta:      `{"icon":"Bars3Icon","title":"菜单管理","hidden":false,"keep_alive":true}`,
-			BtnPerms:  `["menu:create","menu:update","menu:delete"]`,
+			Meta: system.MenuMeta{
+				Icon:      "MenuOutlined",
+				Title:     "菜单管理",
+				Hidden:    false,
+				KeepAlive: true,
+			},
+			BtnPerms: []string{"menu:create", "menu:update", "menu:delete"},
 		},
 		// 工具箱子菜单
 		{
@@ -168,8 +396,13 @@ func InitializeData() error {
 			Name:      "CodeGenerator",
 			Component: "tools/code-generator",
 			Sort:      1,
-			Meta:      `{"icon":"CodeBracketIcon","title":"代码生成器","hidden":false,"keep_alive":true}`,
-			BtnPerms:  `["code:generate"]`,
+			Meta: system.MenuMeta{
+				Icon:      "CodeOutlined",
+				Title:     "代码生成器",
+				Hidden:    false,
+				KeepAlive: true,
+			},
+			BtnPerms: []string{"code:generate"},
 		},
 		{
 			ParentID:  toolsMenu.ID,
@@ -177,8 +410,13 @@ func InitializeData() error {
 			Name:      "DbInspector",
 			Component: "tools/db-inspector",
 			Sort:      2,
-			Meta:      `{"icon":"CircleStackIcon","title":"数据库检查器","hidden":false,"keep_alive":true}`,
-			BtnPerms:  `["db:inspect"]`,
+			Meta: system.MenuMeta{
+				Icon:      "DatabaseOutlined",
+				Title:     "数据库检查器",
+				Hidden:    false,
+				KeepAlive: true,
+			},
+			BtnPerms: []string{"db:inspect"},
 		},
 	}
 

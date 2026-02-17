@@ -22,7 +22,7 @@ export function MenuModal({ visible, menu, onSuccess, onCancel }: MenuModalProps
       if (menu) {
         // Edit mode: populate form with menu data
         form.setFieldsValue({
-          parentId: menu.parent_id || 0,
+          parentId: menu.parentId || 0,
           path: menu.path,
           name: menu.name,
           component: menu.component,

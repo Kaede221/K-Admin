@@ -1,6 +1,6 @@
 export interface MenuItem {
   id: number;
-  parent_id: number;
+  parentId: number;
   path: string;
   name: string;
   component: string;

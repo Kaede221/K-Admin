@@ -54,9 +54,6 @@ export const useUserStore = create<UserState>()(
           refreshToken: refreshToken,
           userInfo: user,
         });
-
-        // Fetch user menu
-        await get().fetchUserMenu();
       },
 
       logout: () => {
@@ -103,7 +100,7 @@ export const useUserStore = create<UserState>()(
           throw new Error('No user info');
         }
 
-        const menuTree = await request.get<MenuItem[]>(`/menu/tree?role_id=${userInfo.roleId}`);
+        const menuTree = await request.get<MenuItem[]>(`/menu/tree?roleId=${userInfo.roleId}`);
 
         // Ensure menuTree is an array (handle null/undefined from backend)
         const safeMenuTree = Array.isArray(menuTree) ? menuTree : [];
@@ -157,6 +154,7 @@ export const useUserStore = create<UserState>()(
         accessToken: state.accessToken,
         refreshToken: state.refreshToken,
         userInfo: state.userInfo,
+        // 不持久化 menuTree 和 permissions，每次刷新重新获取
       }),
     }
   )
