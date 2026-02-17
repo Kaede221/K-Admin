@@ -121,6 +121,7 @@ func main() {
 		systemRouter.InitUserRouter(apiV1)
 		systemRouter.InitRoleRouter(apiV1)
 		systemRouter.InitMenuRouter(apiV1)
+		systemRouter.InitDashboardRouter(apiV1)
 
 		// Tools module routes
 		toolsGroup := apiV1.Group("/tools")
