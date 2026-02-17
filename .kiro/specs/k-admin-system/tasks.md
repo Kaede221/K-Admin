@@ -677,33 +677,33 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
 
 ### Phase 7: Developer Tools Pages
 
-- [ ] 30. Implement Database Inspector page
-  - [ ] 30.1 Create DB Inspector layout
+- [x] 30. Implement Database Inspector page
+  - [x] 30.1 Create DB Inspector layout
     - Create views/tools/db-inspector/index.tsx
     - Design two-column layout: table list (left) and content area (right)
     - Add database connection selector
     - _Requirements: 7.1_
   
-  - [ ] 30.2 Create table list component
+  - [x] 30.2 Create table list component
     - Create views/tools/db-inspector/components/TableList.tsx
     - Display all tables with search filter
     - Highlight selected table
     - _Requirements: 7.2_
   
-  - [ ] 30.3 Create table schema viewer
+  - [x] 30.3 Create table schema viewer
     - Create views/tools/db-inspector/components/SchemaViewer.tsx
     - Display table columns in table format
     - Show column name, type, nullable, key, default, comment
     - _Requirements: 7.3_
   
-  - [ ] 30.4 Create table data browser
+  - [x] 30.4 Create table data browser
     - Create views/tools/db-inspector/components/DataBrowser.tsx
     - Display table data with pagination
     - Support inline editing
     - Add action buttons: create, edit, delete
     - _Requirements: 7.4, 7.5_
   
-  - [ ] 30.5 Create SQL console component
+  - [x] 30.5 Create SQL console component
     - Create views/tools/db-inspector/components/SQLConsole.tsx
     - Integrate Monaco Editor for SQL input
     - Add execute button with read-only mode toggle
@@ -712,47 +712,47 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Add confirmation dialog for dangerous operations
     - _Requirements: 7.6, 7.7, 7.8, 7.9_
 
-- [ ] 31. Implement Code Generator page
-  - [ ] 31.1 Create Code Generator layout
+- [x] 31. Implement Code Generator page
+  - [x] 31.1 Create Code Generator layout
     - Create views/tools/code-generator/index.tsx
     - Design wizard-style interface with steps
     - Steps: Select Table �?Configure �?Preview �?Generate
     - _Requirements: 8.1, 8.3_
   
-  - [ ] 31.2 Create table selection step
+  - [x] 31.2 Create table selection step
     - Create views/tools/code-generator/components/TableSelect.tsx
     - Display table list with radio selection
     - Show table metadata preview
     - _Requirements: 8.1, 8.2_
   
-  - [ ] 31.3 Create configuration step
+  - [x] 31.3 Create configuration step
     - Create views/tools/code-generator/components/ConfigForm.tsx
     - Form fields: struct_name, package_name, frontend_path
     - Display field mapping table (editable)
     - Add generation options checkboxes
     - _Requirements: 8.3_
   
-  - [ ] 31.4 Create code preview step
+  - [x] 31.4 Create code preview step
     - Create views/tools/code-generator/components/CodePreview.tsx
     - Display generated code in tabs (model, service, API, router, frontend)
     - Use Monaco Editor for syntax highlighting
     - _Requirements: 8.8_
   
-  - [ ] 31.5 Create generation confirmation step
+  - [x] 31.5 Create generation confirmation step
     - Create views/tools/code-generator/components/GenerateConfirm.tsx
     - Show summary of files to be generated
     - Add generate button
     - Display success/error messages
     - _Requirements: 8.4, 8.5_
   
-  - [ ] 31.6 Add table creation feature
+  - [x] 31.6 Add table creation feature
     - Create views/tools/code-generator/components/TableCreate.tsx
     - Form to define table name and fields
     - Field configuration: name, type, nullable, default, comment
     - Call create table API
     - _Requirements: 8.9_
 
-- [ ] 32. Checkpoint - Verify developer tools pages
+- [x] 32. Checkpoint - Verify developer tools pages
   - Ensure all tests pass, ask the user if questions arise.
 
 
