@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { setTheme as saveTheme, getTheme } from '@/utils/storage';
 
 export interface TabItem {
   key: string;
@@ -10,14 +9,11 @@ export interface TabItem {
 }
 
 interface AppState {
-  theme: 'light' | 'dark';
   collapsed: boolean;
   tabs: TabItem[];
   activeTab: string;
 
   // Actions
-  toggleTheme: () => void;
-  setTheme: (theme: 'light' | 'dark') => void;
   toggleSidebar: () => void;
   setSidebarCollapsed: (collapsed: boolean) => void;
   addTab: (tab: TabItem) => void;
@@ -31,7 +27,6 @@ interface AppState {
 export const useAppStore = create<AppState>()(
   persist(
     (set, get) => ({
-      theme: getTheme() || 'light',
       collapsed: false,
       tabs: [
         {
@@ -42,17 +37,6 @@ export const useAppStore = create<AppState>()(
         },
       ],
       activeTab: '/dashboard',
-
-      toggleTheme: () => {
-        const newTheme = get().theme === 'light' ? 'dark' : 'light';
-        saveTheme(newTheme);
-        set({ theme: newTheme });
-      },
-
-      setTheme: (theme: 'light' | 'dark') => {
-        saveTheme(theme);
-        set({ theme });
-      },
 
       toggleSidebar: () => {
         set({ collapsed: !get().collapsed });
@@ -140,7 +124,6 @@ export const useAppStore = create<AppState>()(
     {
       name: 'app-storage',
       partialize: (state) => ({
-        theme: state.theme,
         collapsed: state.collapsed,
         tabs: state.tabs,
         activeTab: state.activeTab,

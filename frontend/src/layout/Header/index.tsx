@@ -2,7 +2,6 @@ import { Layout, Space, Avatar, Dropdown, Typography } from 'antd';
 import { UserOutlined, LogoutOutlined, SettingOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { useUserStore } from '@/store/userStore';
-import { ThemeSwitch } from '@/components/Theme/ThemeSwitch';
 
 const { Header: AntHeader } = Layout;
 const { Text } = Typography;
@@ -55,8 +54,6 @@ export function Header() {
       <div />
       
       <Space size="large">
-        <ThemeSwitch />
-        
         <Dropdown
           menu={{ items: userMenuItems, onClick: handleMenuClick }}
           placement="bottomRight"
