@@ -4,6 +4,7 @@ import { PlusOutlined, EditOutlined, DeleteOutlined, KeyOutlined, PoweroffOutlin
 import { ProTable, type ProTableActionRef, type ProTableColumn } from '@/components/ProTable';
 import { AuthButton } from '@/components/Auth';
 import { getUserList, deleteUser, toggleUserStatus, resetPassword } from '@/api/user';
+import { formatDate } from '@/utils/format';
 import type { UserInfo } from '@/types/user';
 import UserModal from './components/UserModal';
 
@@ -127,6 +128,7 @@ export function UserManagement() {
       dataIndex: 'createdAt',
       width: 180,
       hideInSearch: true,
+      render: (createdAt: string) => formatDate(createdAt, 'YYYY-MM-DD'),
     },
     {
       title: '操作',

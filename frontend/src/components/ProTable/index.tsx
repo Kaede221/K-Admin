@@ -1,4 +1,4 @@
-import { useState, useImperativeHandle, forwardRef, type ReactNode } from 'react';
+import { useState, useImperativeHandle, forwardRef, useEffect, type ReactNode } from 'react';
 import { Table, Form, Button, Space, Card } from 'antd';
 import { SearchOutlined, ReloadOutlined, DownloadOutlined } from '@ant-design/icons';
 import type { TableProps, FormInstance } from 'antd';
@@ -101,6 +101,11 @@ function ProTableComponent<T extends Record<string, any>>(
     reload: () => fetchData(),
     reset: handleReset,
   }));
+
+  // Fetch data on mount
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   // Filter columns for search form
   const searchColumns = columns.filter((col) => !col.hideInSearch);
