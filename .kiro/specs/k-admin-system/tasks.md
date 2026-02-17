@@ -193,41 +193,41 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - _Requirements: 2.3, 3.4_
 
 
-- [ ] 7. Implement Menu module (model, service, API, router)
-  - [ ] 7.1 Create Menu model and database table
+- [x] 7. Implement Menu module (model, service, API, router)
+  - [x] 7.1 Create Menu model and database table
     - Define model/system/sys_menu.go with SysMenu struct
     - Include fields: parent_id, path, name, component, sort, meta (JSON), btn_perms (JSON)
     - Define many-to-many relationship with SysRole
     - _Requirements: 6.1, 6.3_
   
-  - [ ] 7.2 Implement Menu service layer
+  - [x] 7.2 Implement Menu service layer
     - Create service/system/menu_service.go
     - Implement GetMenuTree (filter by role, build hierarchy)
     - Implement CreateMenu, UpdateMenu, DeleteMenu, GetMenuByID, GetAllMenus
     - Implement BuildMenuTree helper (recursive tree building)
     - _Requirements: 3.2, 6.2, 6.5, 6.6_
   
-  - [ ] 7.3 Write property tests for Menu service
+  - [x] 7.3 Write property tests for Menu service
     - **Property 5: Menu Tree Authorization Filtering**
     - **Property 15: Menu Hierarchy Preservation**
     - **Property 16: Menu Metadata Serialization Round-Trip**
     - **Property 17: Hidden Menu Route Accessibility**
     - **Validates: Requirements 3.2, 6.2, 6.3, 6.6, 6.8**
   
-  - [ ] 7.4 Create Menu API controllers
+  - [x] 7.4 Create Menu API controllers
     - Create api/v1/system/menu.go
     - Implement handlers: GetMenuTree, CreateMenu, UpdateMenu, DeleteMenu, GetMenu, GetAllMenus
     - Add Swagger annotations
     - _Requirements: 3.2, 6.2, 6.5, 6.6, 14.3_
   
-  - [ ] 7.5 Write unit tests for Menu API
+  - [x] 7.5 Write unit tests for Menu API
     - Test menu tree generation for different roles
     - Test menu hierarchy with nested structures
     - Test menu sorting
     - Test hidden menu handling
     - _Requirements: 3.2, 6.2, 6.6, 6.8_
   
-  - [ ] 7.6 Register Menu routes
+  - [x] 7.6 Register Menu routes
     - Create router/system/menu.go
     - Register protected routes: /menu/* (require JWT)
     - _Requirements: 2.3_

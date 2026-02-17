@@ -77,6 +77,7 @@ func main() {
 		// System module routes
 		systemRouter.InitUserRouter(apiV1)
 		systemRouter.InitRoleRouter(apiV1)
+		systemRouter.InitMenuRouter(apiV1)
 	}
 
 	// Start server
