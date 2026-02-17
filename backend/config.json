@@ -1,0 +1,34 @@
+{
+  "server": {
+    "port": ":8080",
+    "mode": "debug"
+  },
+  "database": {
+    "host": "localhost",
+    "port": 3306,
+    "name": "k_admin",
+    "username": "root",
+    "password": "password",
+    "max_idle_conns": 10,
+    "max_open_conns": 100
+  },
+  "jwt": {
+    "secret": "your-secret-key-change-this-in-production",
+    "access_expiration": 15,
+    "refresh_expiration": 7
+  },
+  "redis": {
+    "host": "localhost",
+    "port": 6379,
+    "password": "",
+    "db": 0
+  },
+  "logger": {
+    "level": "info",
+    "path": "./logs/app.log",
+    "max_size": 100,
+    "max_age": 7,
+    "max_backups": 3,
+    "compress": true
+  }
+}

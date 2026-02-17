@@ -11,96 +11,96 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
 ### Phase 1: Backend Foundation
 
 - [ ] 1. Set up backend project structure and core infrastructure
-  - [-] 1.1 Initialize Go module and create directory structure (api, config, core, global, middleware, model, router, service, utils)
+  - [x] 1.1 Initialize Go module and create directory structure (api, config, core, global, middleware, model, router, service, utils)
     - Create main.go entry point
     - Set up go.mod with dependencies: gin, gorm, viper, zap, jwt-go, casbin
     - _Requirements: Project structure from PRD_
   
-  - [~] 1.2 Implement configuration management using Viper
+  - [x] 1.2 Implement configuration management using Viper
     - Create config/config.go with structs for Server, Database, JWT, Redis, Logger
     - Implement config loading from YAML, JSON, and environment variables
     - Add validation for required fields
     - _Requirements: 12.2, 12.3, 12.4_
   
-  - [~] 1.3 Write property test for configuration management
+  - [x] 1.3 Write property test for configuration management
     - **Property 38: Configuration Source Priority**
     - **Property 39: Configuration Validation on Startup**
     - **Validates: Requirements 12.2, 12.4, 12.5**
   
-  - [~] 1.4 Implement logging system using Zap and Lumberjack
+  - [x] 1.4 Implement logging system using Zap and Lumberjack
     - Create core/zap.go for logger initialization
     - Configure log levels, output destinations, and rotation
     - Implement structured logging helpers
     - _Requirements: 13.1, 13.2, 13.3, 13.7, 13.8_
   
-  - [~] 1.5 Write property tests for logging system
+  - [x] 1.5 Write property tests for logging system
     - **Property 40: Log Level Filtering**
     - **Property 43: Environment-Specific Log Output**
     - **Validates: Requirements 13.3, 13.7, 13.8**
 
 
 - [ ] 2. Set up database connection and base models
-  - [~] 2.1 Implement database connection with Gorm
+  - [x] 2.1 Implement database connection with Gorm
     - Create core/gorm.go for database initialization
     - Configure connection pooling and reconnection logic
     - Implement slow query logging
     - _Requirements: 15.1, 15.2, 15.3, 15.4, 15.8_
   
-  - [~] 2.2 Write property tests for database connection
+  - [ ] 2.2 Write property tests for database connection
     - **Property 44: Database Connection Pool Management**
     - **Property 45: Automatic Database Reconnection**
     - **Property 48: Slow Query Logging**
     - **Validates: Requirements 15.3, 15.4, 15.8**
   
-  - [~] 2.3 Create base model and common structures
+  - [x] 2.3 Create base model and common structures
     - Define model/common/base.go with BaseModel (ID, CreatedAt, UpdatedAt, DeletedAt)
     - Define model/common/response.go with Response struct
     - Implement response helper functions (Ok, Fail, OkWithDetailed, FailWithCode)
     - _Requirements: 1.1, 1.4, 15.6_
   
-  - [~] 2.4 Write property test for unified response structure
+  - [ ] 2.4 Write property test for unified response structure
     - **Property 1: Unified Response Structure**
     - **Validates: Requirements 1.1, 1.2, 1.3**
   
-  - [~] 2.5 Implement database migration system
+  - [x] 2.5 Implement database migration system
     - Create initialization script for AutoMigrate
     - Add migration tracking
     - _Requirements: 15.5_
   
-  - [~] 2.6 Write property test for database migrations
+  - [ ] 2.6 Write property test for database migrations
     - **Property 46: Database Migration Execution**
     - **Validates: Requirements 15.5**
 
 - [ ] 3. Implement authentication and JWT management
-  - [~] 3.1 Create JWT utility functions
+  - [x] 3.1 Create JWT utility functions
     - Define utils/jwt.go with JWTClaims struct
     - Implement GenerateToken (access + refresh tokens)
     - Implement ParseToken and RefreshToken
     - Implement token blacklist functions using Redis
     - _Requirements: 2.1, 2.5, 2.7_
   
-  - [~] 3.2 Write property tests for JWT functionality
+  - [ ] 3.2 Write property tests for JWT functionality
     - **Property 3: Token Generation and Refresh Cycle**
     - **Property 4: Token Blacklist Enforcement**
     - **Validates: Requirements 2.1, 2.5, 2.7**
   
-  - [~] 3.3 Implement password hashing utilities
+  - [x] 3.3 Implement password hashing utilities
     - Create utils/hash.go with bcrypt functions
     - Implement HashPassword and CheckPassword
     - _Requirements: 2.2_
   
-  - [~] 3.4 Write property test for password encryption
+  - [ ] 3.4 Write property test for password encryption
     - **Property 2: Password Encryption Round-Trip**
     - **Validates: Requirements 2.2**
   
-  - [~] 3.5 Create JWT authentication middleware
+  - [x] 3.5 Create JWT authentication middleware
     - Implement middleware/jwt.go
     - Extract and validate tokens from Authorization header
     - Set user info in Gin context
     - Handle token expiration and blacklist checking
     - _Requirements: 2.3, 16.1_
   
-  - [~] 3.6 Write property test for JWT middleware
+  - [ ] 3.6 Write property test for JWT middleware
     - **Property 49: JWT Middleware Token Validation**
     - **Validates: Requirements 16.1**
 
@@ -111,13 +111,13 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
 ### Phase 2: Core System Modules
 
 - [ ] 5. Implement User module (model, service, API, router)
-  - [~] 5.1 Create User model and database table
+  - [ ] 5.1 Create User model and database table
     - Define model/system/sys_user.go with SysUser struct
     - Include fields: username, password, nickname, header_img, phone, email, role_id, active
     - Add Gorm tags and JSON tags (exclude password from JSON)
     - _Requirements: 4.1, 4.7_
   
-  - [~] 5.2 Implement User service layer
+  - [ ] 5.2 Implement User service layer
     - Create service/system/user_service.go
     - Implement Login (validate credentials, generate tokens)
     - Implement CreateUser, UpdateUser, DeleteUser (soft delete), GetUserByID
@@ -125,7 +125,7 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Implement ChangePassword, ResetPassword, ToggleUserStatus
     - _Requirements: 4.2, 4.3, 4.4, 4.5, 4.6, 4.8_
   
-  - [~] 5.3 Write property tests for User service
+  - [ ] 5.3 Write property tests for User service
     - **Property 9: User CRUD Consistency**
     - **Property 10: Password Field Masking**
     - **Property 11: Username Uniqueness Validation**
@@ -133,21 +133,21 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - **Property 47: Soft Delete Behavior**
     - **Validates: Requirements 4.2, 4.3, 4.4, 4.5, 4.6, 4.7, 4.8, 15.7**
   
-  - [~] 5.4 Create User API controllers
+  - [ ] 5.4 Create User API controllers
     - Create api/v1/system/user.go
     - Implement handlers: Login, CreateUser, UpdateUser, DeleteUser, GetUser, GetUserList
     - Implement ChangePassword, ResetPassword, ToggleStatus
     - Add Swagger annotations
     - _Requirements: 4.2, 4.3, 4.4, 4.5, 4.6, 14.3_
   
-  - [~] 5.5 Write unit tests for User API
+  - [ ] 5.5 Write unit tests for User API
     - Test login with valid/invalid credentials
     - Test user creation with duplicate username
     - Test password masking in responses
     - Test pagination and filtering
     - _Requirements: 4.2, 4.6, 4.7, 4.8_
   
-  - [~] 5.6 Register User routes
+  - [ ] 5.6 Register User routes
     - Create router/system/user.go
     - Register routes with appropriate middleware
     - Public routes: /login
@@ -155,13 +155,13 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - _Requirements: 2.3_
 
 - [ ] 6. Implement Role module (model, service, API, router)
-  - [~] 6.1 Create Role model and database table
+  - [ ] 6.1 Create Role model and database table
     - Define model/system/sys_role.go with SysRole struct
     - Include fields: role_name, role_key, data_scope, sort, status, remark
     - Define many-to-many relationship with SysMenu
     - _Requirements: 5.1_
   
-  - [~] 6.2 Implement Role service layer
+  - [ ] 6.2 Implement Role service layer
     - Create service/system/role_service.go
     - Implement CreateRole, UpdateRole, DeleteRole, GetRoleByID, GetRoleList
     - Implement AssignMenus, GetRoleMenus
@@ -169,65 +169,65 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Add validation to prevent deleting roles with users
     - _Requirements: 5.2, 5.3, 5.4, 5.5, 5.6_
   
-  - [~] 6.3 Write property tests for Role service
+  - [ ] 6.3 Write property tests for Role service
     - **Property 13: Role Deletion Protection**
     - **Property 14: Role Permission Assignment**
     - **Validates: Requirements 5.3, 5.4, 5.6**
   
-  - [~] 6.4 Create Role API controllers
+  - [ ] 6.4 Create Role API controllers
     - Create api/v1/system/role.go
     - Implement handlers: CreateRole, UpdateRole, DeleteRole, GetRole, GetRoleList
     - Implement AssignMenus, GetRoleMenus, AssignAPIs, GetRoleAPIs
     - Add Swagger annotations
     - _Requirements: 5.2, 5.3, 5.4, 5.5, 5.6, 14.3_
   
-  - [~] 6.5 Write unit tests for Role API
+  - [ ] 6.5 Write unit tests for Role API
     - Test role creation and updates
     - Test role deletion with associated users
     - Test menu and API permission assignment
     - _Requirements: 5.2, 5.3, 5.4, 5.6_
   
-  - [~] 6.6 Register Role routes
+  - [ ] 6.6 Register Role routes
     - Create router/system/role.go
     - Register protected routes: /role/* (require JWT + admin permission)
     - _Requirements: 2.3, 3.4_
 
 
 - [ ] 7. Implement Menu module (model, service, API, router)
-  - [~] 7.1 Create Menu model and database table
+  - [ ] 7.1 Create Menu model and database table
     - Define model/system/sys_menu.go with SysMenu struct
     - Include fields: parent_id, path, name, component, sort, meta (JSON), btn_perms (JSON)
     - Define many-to-many relationship with SysRole
     - _Requirements: 6.1, 6.3_
   
-  - [~] 7.2 Implement Menu service layer
+  - [ ] 7.2 Implement Menu service layer
     - Create service/system/menu_service.go
     - Implement GetMenuTree (filter by role, build hierarchy)
     - Implement CreateMenu, UpdateMenu, DeleteMenu, GetMenuByID, GetAllMenus
     - Implement BuildMenuTree helper (recursive tree building)
     - _Requirements: 3.2, 6.2, 6.5, 6.6_
   
-  - [~] 7.3 Write property tests for Menu service
+  - [ ] 7.3 Write property tests for Menu service
     - **Property 5: Menu Tree Authorization Filtering**
     - **Property 15: Menu Hierarchy Preservation**
     - **Property 16: Menu Metadata Serialization Round-Trip**
     - **Property 17: Hidden Menu Route Accessibility**
     - **Validates: Requirements 3.2, 6.2, 6.3, 6.6, 6.8**
   
-  - [~] 7.4 Create Menu API controllers
+  - [ ] 7.4 Create Menu API controllers
     - Create api/v1/system/menu.go
     - Implement handlers: GetMenuTree, CreateMenu, UpdateMenu, DeleteMenu, GetMenu, GetAllMenus
     - Add Swagger annotations
     - _Requirements: 3.2, 6.2, 6.5, 6.6, 14.3_
   
-  - [~] 7.5 Write unit tests for Menu API
+  - [ ] 7.5 Write unit tests for Menu API
     - Test menu tree generation for different roles
     - Test menu hierarchy with nested structures
     - Test menu sorting
     - Test hidden menu handling
     - _Requirements: 3.2, 6.2, 6.6, 6.8_
   
-  - [~] 7.6 Register Menu routes
+  - [ ] 7.6 Register Menu routes
     - Create router/system/menu.go
     - Register protected routes: /menu/* (require JWT)
     - _Requirements: 2.3_

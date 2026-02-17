@@ -1,0 +1,4 @@
+{"level":"info","timestamp":"2026-02-17T15:52:01.498+0800","caller":"core/zap.go:113","msg":"test info message","key":"value"}
+{"level":"debug","timestamp":"2026-02-17T15:52:01.499+0800","caller":"core/zap.go:118","msg":"test debug message","count":42}
+{"level":"warn","timestamp":"2026-02-17T15:52:01.499+0800","caller":"core/zap.go:123","msg":"test warning message","flag":true}
+{"level":"error","timestamp":"2026-02-17T15:52:01.500+0800","caller":"core/zap.go:128","msg":"test error message","error":"file does not exist","stacktrace":"k-admin-system/core.LogError\n\tE:/WorkSpace/Personal/K-Admin/backend/core/zap.go:128\nk-admin-system/core.TestLogHelpers.func5\n\tE:/WorkSpace/Personal/K-Admin/backend/core/zap_test.go:165\ntesting.tRunner\n\tC:/DevEnv/Go/src/testing/testing.go:1934"}
