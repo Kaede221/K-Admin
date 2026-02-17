@@ -9,6 +9,7 @@ import (
 	"k-admin-system/global"
 	"k-admin-system/middleware"
 	systemRouter "k-admin-system/router/system"
+	toolsRouter "k-admin-system/router/tools"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -101,6 +102,10 @@ func main() {
 		systemRouter.InitUserRouter(apiV1)
 		systemRouter.InitRoleRouter(apiV1)
 		systemRouter.InitMenuRouter(apiV1)
+
+		// Tools module routes
+		toolsGroup := apiV1.Group("/tools")
+		toolsRouter.InitDBInspectorRouter(toolsGroup)
 	}
 
 	// Start server
