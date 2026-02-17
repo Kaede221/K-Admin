@@ -1,13 +1,25 @@
 ---
 inclusion: always
 ---
-<!------------------------------------------------------------------------------------
-   Add rules to this file or a short description and have Kiro refine them for you.
-   
-   Learn about inclusion modes: https://kiro.dev/docs/steering/#inclusion-modes
--------------------------------------------------------------------------------------> 
 
-请你遵循如下规则:
+# Project Development Rules
 
-1. 不要创建任何 exe 或者临时文件或者测试文件. 例如我们不要运行: `go build -o k-admin.exe .`. 但是你可以在没有输出的条件下进行编译, 以确认是否正确.
-2. 前端也好, 后端也好, 不要构建任何的单元测试, 这是毫无用处的.
+## Build and Compilation
+
+- DO NOT create executable output files (e.g., `go build -o k-admin.exe .`)
+- DO compile without output to verify correctness (e.g., `go build` without `-o` flag)
+- DO NOT create temporary files or test artifacts during development
+
+## Testing Policy
+
+- DO NOT create or generate unit tests for frontend or backend code
+- This project does not require automated test coverage
+
+## File Management
+
+- Keep the workspace clean by avoiding unnecessary file generation
+- Focus on source code implementation rather than test infrastructure
+
+## Critical
+
+These rules are mandatory and must be followed without exception.

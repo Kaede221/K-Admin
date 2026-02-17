@@ -85,6 +85,118 @@ func InitializeData() error {
 	}
 	global.Logger.Info("Admin user created", zap.Uint("userId", adminUser.ID))
 
+	// 创建默认菜单
+	menus := []system.SysMenu{
+		// 仪表盘
+		{
+			ParentID:  0,
+			Path:      "/dashboard",
+			Name:      "Dashboard",
+			Component: "dashboard",
+			Sort:      1,
+			Meta:      `{"icon":"HomeIcon","title":"仪表盘","hidden":false,"keep_alive":true}`,
+			BtnPerms:  `[]`,
+		},
+		// 系统管理
+		{
+			ParentID:  0,
+			Path:      "/system",
+			Name:      "System",
+			Component: "Layout",
+			Sort:      2,
+			Meta:      `{"icon":"CogIcon","title":"系统管理","hidden":false,"keep_alive":true}`,
+			BtnPerms:  `[]`,
+		},
+		// 工具箱
+		{
+			ParentID:  0,
+			Path:      "/tools",
+			Name:      "Tools",
+			Component: "Layout",
+			Sort:      3,
+			Meta:      `{"icon":"WrenchIcon","title":"工具箱","hidden":false,"keep_alive":true}`,
+			BtnPerms:  `[]`,
+		},
+	}
+
+	// 批量创建菜单
+	if err := global.DB.Create(&menus).Error; err != nil {
+		global.Logger.Error("Failed to create menus", zap.Error(err))
+		return err
+	}
+	global.Logger.Info("Default menus created", zap.Int("count", len(menus)))
+
+	// 获取父菜单ID
+	var systemMenu, toolsMenu system.SysMenu
+	global.DB.Where("name = ?", "System").First(&systemMenu)
+	global.DB.Where("name = ?", "Tools").First(&toolsMenu)
+
+	// 创建子菜单
+	subMenus := []system.SysMenu{
+		// 系统管理子菜单
+		{
+			ParentID:  systemMenu.ID,
+			Path:      "/system/user",
+			Name:      "User",
+			Component: "system/user",
+			Sort:      1,
+			Meta:      `{"icon":"UserIcon","title":"用户管理","hidden":false,"keep_alive":true}`,
+			BtnPerms:  `["user:create","user:update","user:delete"]`,
+		},
+		{
+			ParentID:  systemMenu.ID,
+			Path:      "/system/role",
+			Name:      "Role",
+			Component: "system/role",
+			Sort:      2,
+			Meta:      `{"icon":"ShieldCheckIcon","title":"角色管理","hidden":false,"keep_alive":true}`,
+			BtnPerms:  `["role:create","role:update","role:delete"]`,
+		},
+		{
+			ParentID:  systemMenu.ID,
+			Path:      "/system/menu",
+			Name:      "Menu",
+			Component: "system/menu",
+			Sort:      3,
+			Meta:      `{"icon":"Bars3Icon","title":"菜单管理","hidden":false,"keep_alive":true}`,
+			BtnPerms:  `["menu:create","menu:update","menu:delete"]`,
+		},
+		// 工具箱子菜单
+		{
+			ParentID:  toolsMenu.ID,
+			Path:      "/tools/code-generator",
+			Name:      "CodeGenerator",
+			Component: "tools/code-generator",
+			Sort:      1,
+			Meta:      `{"icon":"CodeBracketIcon","title":"代码生成器","hidden":false,"keep_alive":true}`,
+			BtnPerms:  `["code:generate"]`,
+		},
+		{
+			ParentID:  toolsMenu.ID,
+			Path:      "/tools/db-inspector",
+			Name:      "DbInspector",
+			Component: "tools/db-inspector",
+			Sort:      2,
+			Meta:      `{"icon":"CircleStackIcon","title":"数据库检查器","hidden":false,"keep_alive":true}`,
+			BtnPerms:  `["db:inspect"]`,
+		},
+	}
+
+	// 批量创建子菜单
+	if err := global.DB.Create(&subMenus).Error; err != nil {
+		global.Logger.Error("Failed to create sub menus", zap.Error(err))
+		return err
+	}
+	global.Logger.Info("Default sub menus created", zap.Int("count", len(subMenus)))
+
+	// 将所有菜单关联到管理员角色
+	allMenus := append(menus, subMenus...)
+	if err := global.DB.Model(adminRole).Association("Menus").Append(allMenus); err != nil {
+		global.Logger.Error("Failed to associate menus with admin role", zap.Error(err))
+		return err
+	}
+	global.Logger.Info("Menus associated with admin role", zap.Int("menuCount", len(allMenus)))
+
 	global.Logger.Info("Initial data created successfully")
 	return nil
 }
