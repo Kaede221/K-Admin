@@ -13,6 +13,8 @@ func RegisterTables(db *gorm.DB) error {
 	// 注册系统模型
 	err := db.AutoMigrate(
 		&system.SysUser{},
+		&system.SysRole{},
+		&system.SysMenu{},
 	)
 	if err != nil {
 		global.Logger.Error("Failed to migrate tables", zap.Error(err))

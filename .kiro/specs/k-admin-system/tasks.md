@@ -155,13 +155,13 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - _Requirements: 2.3_
 
 - [ ] 6. Implement Role module (model, service, API, router)
-  - [ ] 6.1 Create Role model and database table
+  - [x] 6.1 Create Role model and database table
     - Define model/system/sys_role.go with SysRole struct
     - Include fields: role_name, role_key, data_scope, sort, status, remark
     - Define many-to-many relationship with SysMenu
     - _Requirements: 5.1_
   
-  - [ ] 6.2 Implement Role service layer
+  - [x] 6.2 Implement Role service layer
     - Create service/system/role_service.go
     - Implement CreateRole, UpdateRole, DeleteRole, GetRoleByID, GetRoleList
     - Implement AssignMenus, GetRoleMenus
@@ -169,7 +169,7 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Add validation to prevent deleting roles with users
     - _Requirements: 5.2, 5.3, 5.4, 5.5, 5.6_
   
-  - [ ] 6.3 Write property tests for Role service
+  - [x] 6.3 Write property tests for Role service
     - **Property 13: Role Deletion Protection**
     - **Property 14: Role Permission Assignment**
     - **Validates: Requirements 5.3, 5.4, 5.6**
