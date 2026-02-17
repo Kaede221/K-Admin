@@ -6,7 +6,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"k-admin/global"
+	"k-admin-system/global"
 
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"

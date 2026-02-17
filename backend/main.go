@@ -24,6 +24,7 @@ import (
 	"flag"
 	"log"
 
+	systemApi "k-admin-system/api/v1/system"
 	"k-admin-system/config"
 	"k-admin-system/core"
 	_ "k-admin-system/docs" // Swagger docs

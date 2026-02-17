@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"time"
 
-	"k-admin/global"
+	"k-admin-system/global"
 
 	"github.com/gin-gonic/gin"
 )
@@ -44,8 +44,8 @@ func HealthCheck(c *gin.Context) {
 	}
 
 	// Check Redis connectivity
-	if global.Redis != nil {
-		if err := global.Redis.Ping(c).Err(); err != nil {
+	if global.RedisClient != nil {
+		if err := global.RedisClient.Ping(c).Err(); err != nil {
 			services["redis"] = "unhealthy: " + err.Error()
 			allHealthy = false
 		} else {
