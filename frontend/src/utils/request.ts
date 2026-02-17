@@ -1,5 +1,10 @@
-import axios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse, type AxiosError } from 'axios';
-import { message } from 'antd';
+import axios, {
+  type AxiosInstance,
+  type AxiosRequestConfig,
+  type AxiosResponse,
+  type AxiosError,
+} from "axios";
+import { getToken, setToken, getRefreshToken, removeToken, removeRefreshToken } from "./storage";
 
 export interface UnifiedResponse<T = any> {
   code: number;
@@ -14,7 +19,7 @@ class RequestClient {
 
   constructor(config?: AxiosRequestConfig) {
     this.axiosInstance = axios.create({
-      baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
+      baseURL: import.meta.env.VITE_API_BASE_URL || "/api",
       timeout: 30000,
       ...config,
     });
@@ -27,7 +32,7 @@ class RequestClient {
     this.axiosInstance.interceptors.request.use(
       (config) => {
         // Add Authorization header
-        const token = localStorage.getItem('access_token');
+        const token = getToken();
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;
         }
@@ -35,7 +40,7 @@ class RequestClient {
       },
       (error) => {
         return Promise.reject(error);
-      }
+      },
     );
 
     // Response interceptor
@@ -48,9 +53,8 @@ class RequestClient {
           return data;
         }
 
-        // Business error
-        message.error(msg || 'Request failed');
-        return Promise.reject(new Error(msg || 'Request failed'));
+        // Business error - don't show message here, let caller handle it
+        return Promise.reject(new Error(msg || "Request failed"));
       },
       async (error: AxiosError<UnifiedResponse>) => {
         // Handle 401 - Token expired
@@ -58,11 +62,11 @@ class RequestClient {
           return this.handleTokenRefresh(error);
         }
 
-        // Handle other errors
-        const msg = error.response?.data?.msg || error.message || 'Network error';
-        message.error(msg);
-        return Promise.reject(error);
-      }
+        // Handle other errors - don't show message here, let caller handle it
+        const msg =
+          error.response?.data?.msg || error.message || "Network error";
+        return Promise.reject(new Error(msg));
+      },
     );
   }
 
@@ -85,20 +89,21 @@ class RequestClient {
     this.isRefreshing = true;
 
     try {
-      const refreshToken = localStorage.getItem('refresh_token');
+      const refreshToken = getRefreshToken();
       if (!refreshToken) {
-        throw new Error('No refresh token');
+        throw new Error("No refresh token");
       }
 
       // Call refresh token API
-      const response = await axios.post<UnifiedResponse<{ access_token: string }>>(
-        `${this.axiosInstance.defaults.baseURL}/auth/refresh`,
-        { refresh_token: refreshToken }
-      );
+      const response = await axios.post<
+        UnifiedResponse<{ access_token: string }>
+      >(`${this.axiosInstance.defaults.baseURL}/auth/refresh`, {
+        refresh_token: refreshToken,
+      });
 
       if (response.data.code === 0) {
         const newToken = response.data.data.access_token;
-        localStorage.setItem('access_token', newToken);
+        setToken(newToken);
 
         // Retry all queued requests
         this.refreshSubscribers.forEach((callback) => callback(newToken));
@@ -108,14 +113,13 @@ class RequestClient {
         originalRequest.headers.Authorization = `Bearer ${newToken}`;
         return this.axiosInstance(originalRequest);
       } else {
-        throw new Error('Token refresh failed');
+        throw new Error("Token refresh failed");
       }
     } catch (refreshError) {
       // Refresh failed, redirect to login
-      localStorage.removeItem('access_token');
-      localStorage.removeItem('refresh_token');
-      localStorage.removeItem('user_info');
-      window.location.href = '/login';
+      removeToken();
+      removeRefreshToken();
+      window.location.href = "/login";
       return Promise.reject(refreshError);
     } finally {
       this.isRefreshing = false;
@@ -126,11 +130,19 @@ class RequestClient {
     return this.axiosInstance.get(url, config);
   }
 
-  post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
+  post<T = any>(
+    url: string,
+    data?: any,
+    config?: AxiosRequestConfig,
+  ): Promise<T> {
     return this.axiosInstance.post(url, data, config);
   }
 
-  put<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
+  put<T = any>(
+    url: string,
+    data?: any,
+    config?: AxiosRequestConfig,
+  ): Promise<T> {
     return this.axiosInstance.put(url, data, config);
   }
 

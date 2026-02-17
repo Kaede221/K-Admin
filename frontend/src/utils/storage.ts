@@ -59,12 +59,26 @@ export const REFRESH_TOKEN_KEY = 'refresh_token';
 export const USER_INFO_KEY = 'user_info';
 export const THEME_KEY = 'theme';
 
-export const getToken = (): string | null => storage.getItem<string>(TOKEN_KEY);
-export const setToken = (token: string): void => storage.setItem(TOKEN_KEY, token);
+export const getToken = (): string | null => {
+  const token = localStorage.getItem(TOKEN_KEY);
+  return token;
+};
+
+export const setToken = (token: string): void => {
+  localStorage.setItem(TOKEN_KEY, token);
+};
+
 export const removeToken = (): void => storage.removeItem(TOKEN_KEY);
 
-export const getRefreshToken = (): string | null => storage.getItem<string>(REFRESH_TOKEN_KEY);
-export const setRefreshToken = (token: string): void => storage.setItem(REFRESH_TOKEN_KEY, token);
+export const getRefreshToken = (): string | null => {
+  const token = localStorage.getItem(REFRESH_TOKEN_KEY);
+  return token;
+};
+
+export const setRefreshToken = (token: string): void => {
+  localStorage.setItem(REFRESH_TOKEN_KEY, token);
+};
+
 export const removeRefreshToken = (): void => storage.removeItem(REFRESH_TOKEN_KEY);
 
 export const getUserInfo = <T = any>(): T | null => storage.getItem<T>(USER_INFO_KEY);

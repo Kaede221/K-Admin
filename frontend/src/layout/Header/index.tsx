@@ -63,7 +63,7 @@ export function Header() {
         >
           <Space style={{ cursor: 'pointer' }}>
             <Avatar
-              src={userInfo?.header_img}
+              src={userInfo?.headerImg || undefined}
               icon={<UserOutlined />}
               size="small"
             />

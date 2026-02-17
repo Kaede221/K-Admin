@@ -21,12 +21,12 @@ export interface TableDataResponse {
 
 // Get all tables
 export const getTables = (): Promise<string[]> => {
-  return request.get('/api/v1/tools/db/tables');
+  return request.get('/tools/db/tables');
 };
 
 // Get table schema
 export const getTableSchema = (tableName: string): Promise<ColumnInfo[]> => {
-  return request.get(`/api/v1/tools/db/schema/${tableName}`);
+  return request.get(`/tools/db/schema/${tableName}`);
 };
 
 // Get table data with pagination
@@ -37,7 +37,7 @@ export interface GetTableDataParams {
 }
 
 export const getTableData = (params: GetTableDataParams): Promise<TableDataResponse> => {
-  return request.get('/api/v1/tools/db/data', { params });
+  return request.get('/tools/db/data', { params });
 };
 
 // Execute SQL
@@ -47,7 +47,7 @@ export interface ExecuteSQLRequest {
 }
 
 export const executeSQL = (data: ExecuteSQLRequest): Promise<any> => {
-  return request.post('/api/v1/tools/db/execute', data);
+  return request.post('/tools/db/execute', data);
 };
 
 // Create record
@@ -57,7 +57,7 @@ export interface CreateRecordRequest {
 }
 
 export const createRecord = (data: CreateRecordRequest): Promise<void> => {
-  return request.post('/api/v1/tools/db/record', data);
+  return request.post('/tools/db/record', data);
 };
 
 // Update record
@@ -68,10 +68,10 @@ export interface UpdateRecordRequest {
 }
 
 export const updateRecord = (data: UpdateRecordRequest): Promise<void> => {
-  return request.put(`/api/v1/tools/db/record/${data.tableName}/${data.id}`, data.data);
+  return request.put(`/tools/db/record/${data.tableName}/${data.id}`, data.data);
 };
 
 // Delete record
 export const deleteRecord = (tableName: string, id: any): Promise<void> => {
-  return request.delete(`/api/v1/tools/db/record/${tableName}/${id}`);
+  return request.delete(`/tools/db/record/${tableName}/${id}`);
 };

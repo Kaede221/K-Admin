@@ -2,26 +2,26 @@ export interface UserInfo {
   id: number;
   username: string;
   nickname: string;
-  header_img: string;
+  headerImg: string;
   phone: string;
   email: string;
-  role_id: number;
+  roleId: number;
   active: boolean;
-  role: RoleInfo;
-  created_at: string;
-  updated_at: string;
+  role?: RoleInfo;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface RoleInfo {
   id: number;
-  role_name: string;
-  role_key: string;
-  data_scope: string;
+  roleName: string;
+  roleKey: string;
+  dataScope: string;
   sort: number;
   status: boolean;
   remark: string;
-  created_at: string;
-  updated_at: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface LoginRequest {
@@ -30,7 +30,7 @@ export interface LoginRequest {
 }
 
 export interface LoginResponse {
-  access_token: string;
-  refresh_token: string;
+  accessToken: string;
+  refreshToken: string;
   user: UserInfo;
 }

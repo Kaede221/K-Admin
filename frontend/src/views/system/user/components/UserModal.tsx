@@ -25,7 +25,7 @@ export function UserModal({ visible, user, onSuccess, onCancel }: UserModalProps
           nickname: user.nickname,
           phone: user.phone,
           email: user.email,
-          roleId: user.role_id,
+          roleId: user.roleId,
           active: user.active,
         });
       } else {

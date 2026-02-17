@@ -33,35 +33,30 @@ export const useUserStore = create<UserState>()(
       menuTree: [],
 
       login: async (username: string, password: string) => {
-        try {
-          const response = await request.post<{
-            access_token: string;
-            refresh_token: string;
-            user: UserInfo;
-          }>('/v1/system/user/login', {
-            username,
-            password,
-          });
+        const response = await request.post<{
+          accessToken: string;
+          refreshToken: string;
+          user: UserInfo;
+        }>('/user/login', {
+          username,
+          password,
+        });
 
-          const { access_token, refresh_token, user } = response;
+        const { accessToken, refreshToken, user } = response;
 
-          // Store tokens
-          setToken(access_token);
-          setRefreshToken(refresh_token);
+        // Store tokens
+        setToken(accessToken);
+        setRefreshToken(refreshToken);
 
-          // Update store
-          set({
-            accessToken: access_token,
-            refreshToken: refresh_token,
-            userInfo: user,
-          });
+        // Update store
+        set({
+          accessToken: accessToken,
+          refreshToken: refreshToken,
+          userInfo: user,
+        });
 
-          // Fetch user menu
-          await get().fetchUserMenu();
-        } catch (error) {
-          console.error('Login failed:', error);
-          throw error;
-        }
+        // Fetch user menu
+        await get().fetchUserMenu();
       },
 
       logout: () => {
@@ -84,62 +79,51 @@ export const useUserStore = create<UserState>()(
       },
 
       refreshAccessToken: async () => {
-        try {
-          const { refreshToken } = get();
-          if (!refreshToken) {
-            throw new Error('No refresh token');
-          }
-
-          const response = await request.post<{ access_token: string }>('/v1/system/user/refresh', {
-            refresh_token: refreshToken,
-          });
-
-          const { access_token } = response;
-
-          // Store new token
-          setToken(access_token);
-
-          // Update store
-          set({ accessToken: access_token });
-        } catch (error) {
-          console.error('Token refresh failed:', error);
-          get().logout();
-          throw error;
+        const { refreshToken } = get();
+        if (!refreshToken) {
+          throw new Error('No refresh token');
         }
+
+        const response = await request.post<{ accessToken: string }>('/user/refresh', {
+          refresh_token: refreshToken,
+        });
+
+        const { accessToken } = response;
+
+        // Store new token
+        setToken(accessToken);
+
+        // Update store
+        set({ accessToken: accessToken });
       },
 
       fetchUserMenu: async () => {
-        try {
-          const { userInfo } = get();
-          if (!userInfo) {
-            throw new Error('No user info');
-          }
-
-          const menuTree = await request.get<MenuItem[]>(`/v1/system/menu/tree?role_id=${userInfo.role_id}`);
-
-          // Extract button permissions from menu tree
-          const permissions: string[] = [];
-          const extractPermissions = (menus: MenuItem[]) => {
-            menus.forEach((menu) => {
-              if (menu.btn_perms && menu.btn_perms.length > 0) {
-                permissions.push(...menu.btn_perms);
-              }
-              if (menu.children && menu.children.length > 0) {
-                extractPermissions(menu.children);
-              }
-            });
-          };
-          extractPermissions(menuTree);
-
-          // Update store
-          set({
-            menuTree,
-            permissions,
-          });
-        } catch (error) {
-          console.error('Fetch user menu failed:', error);
-          throw error;
+        const { userInfo } = get();
+        if (!userInfo) {
+          throw new Error('No user info');
         }
+
+        const menuTree = await request.get<MenuItem[]>(`/menu/tree?role_id=${userInfo.roleId}`);
+
+        // Extract button permissions from menu tree
+        const permissions: string[] = [];
+        const extractPermissions = (menus: MenuItem[]) => {
+          menus.forEach((menu) => {
+            if (menu.btn_perms && menu.btn_perms.length > 0) {
+              permissions.push(...menu.btn_perms);
+            }
+            if (menu.children && menu.children.length > 0) {
+              extractPermissions(menu.children);
+            }
+          });
+        };
+        extractPermissions(menuTree);
+
+        // Update store
+        set({
+          menuTree,
+          permissions,
+        });
       },
 
       hasPermission: (perm: string) => {

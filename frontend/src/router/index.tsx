@@ -1,4 +1,4 @@
-import { createBrowserRouter, type RouteObject } from 'react-router-dom';
+import { createBrowserRouter, type RouteObject, Navigate } from 'react-router-dom';
 import { lazy } from 'react';
 import { AuthGuard, GuestGuard } from './guards';
 import { generateRoutes } from './generator';
@@ -8,6 +8,7 @@ import { useUserStore } from '@/store/userStore';
 const Login = lazy(() => import('@/views/login'));
 const NotFound = lazy(() => import('@/views/error/404'));
 const Forbidden = lazy(() => import('@/views/error/403'));
+const Dashboard = lazy(() => import('@/views/dashboard'));
 const Layout = lazy(() => import('@/layout'));
 
 /**
@@ -41,6 +42,21 @@ export function createAppRouter() {
   
   // Generate dynamic routes from menu tree
   const dynamicRoutes = menuTree.length > 0 ? generateRoutes(menuTree) : [];
+  
+  // Add dashboard as a fallback route if not in dynamic routes
+  const hasDashboard = dynamicRoutes.some(route => route.path === '/dashboard' || route.path === 'dashboard');
+  if (!hasDashboard) {
+    dynamicRoutes.unshift({
+      path: 'dashboard',
+      element: <Dashboard />,
+    });
+  }
+  
+  // Add index route to redirect to dashboard
+  dynamicRoutes.unshift({
+    index: true,
+    element: <Navigate to="/dashboard" replace />,
+  });
 
   // Protected routes wrapped in Layout and AuthGuard
   const protectedRoutes: RouteObject = {

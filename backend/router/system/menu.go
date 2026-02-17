@@ -11,7 +11,7 @@ import (
 func InitMenuRouter(router *gin.RouterGroup) {
 	menuApi := system.MenuApi{}
 
-	// 受保护的路由（需要JWT认证）
+	// 受保护的路由（需要JWT认证和Casbin授权）
 	protectedGroup := router.Group("/menu")
 	protectedGroup.Use(middleware.JWTAuth())
 	protectedGroup.Use(middleware.CasbinAuth())
@@ -22,6 +22,13 @@ func InitMenuRouter(router *gin.RouterGroup) {
 		protectedGroup.DELETE("/:id", menuApi.DeleteMenu)
 		protectedGroup.GET("/:id", menuApi.GetMenu)
 		protectedGroup.GET("/all", menuApi.GetAllMenus)
-		protectedGroup.GET("/tree", menuApi.GetMenuTree)
+	}
+
+	// 菜单树查询（仅需要JWT认证，不需要Casbin授权）
+	// 因为该接口根据roleId过滤菜单，已经实现了权限控制
+	menuTreeGroup := router.Group("/menu")
+	menuTreeGroup.Use(middleware.JWTAuth())
+	{
+		menuTreeGroup.GET("/tree", menuApi.GetMenuTree)
 	}
 }

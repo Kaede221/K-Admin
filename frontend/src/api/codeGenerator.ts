@@ -43,17 +43,17 @@ export interface GeneratedFiles {
 
 // Get table metadata
 export const getTableMetadata = (tableName: string): Promise<TableMetadata> => {
-  return request.get(`/api/v1/tools/gen/metadata/${tableName}`);
+  return request.get(`/tools/gen/metadata/${tableName}`);
 };
 
 // Preview generated code
 export const previewCode = (config: GenerateConfig): Promise<GeneratedFiles> => {
-  return request.post('/api/v1/tools/gen/preview', config);
+  return request.post('/tools/gen/preview', config);
 };
 
 // Generate code and write to files
 export const generateCode = (config: GenerateConfig): Promise<GeneratedFiles> => {
-  return request.post('/api/v1/tools/gen/generate', config);
+  return request.post('/tools/gen/generate', config);
 };
 
 // Create table from field definitions
@@ -63,5 +63,5 @@ export interface CreateTableRequest {
 }
 
 export const createTable = (data: CreateTableRequest): Promise<void> => {
-  return request.post('/api/v1/tools/gen/create-table', data);
+  return request.post('/tools/gen/create-table', data);
 };

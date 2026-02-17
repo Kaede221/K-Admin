@@ -28,12 +28,12 @@ export interface GetRoleListResponse {
 }
 
 export const getRoleList = (params: GetRoleListParams): Promise<GetRoleListResponse> => {
-  return request.get('/api/v1/role/list', { params });
+  return request.get('/role/list', { params });
 };
 
 // Get role by ID
 export const getRoleById = (id: number): Promise<RoleInfo> => {
-  return request.get(`/api/v1/role/${id}`);
+  return request.get(`/role/${id}`);
 };
 
 // Create role
@@ -47,7 +47,7 @@ export interface CreateRoleRequest {
 }
 
 export const createRole = (data: CreateRoleRequest): Promise<RoleInfo> => {
-  return request.post('/api/v1/role', data);
+  return request.post('/role', data);
 };
 
 // Update role
@@ -62,12 +62,12 @@ export interface UpdateRoleRequest {
 }
 
 export const updateRole = (data: UpdateRoleRequest): Promise<RoleInfo> => {
-  return request.put(`/api/v1/role/${data.id}`, data);
+  return request.put(`/role/${data.id}`, data);
 };
 
 // Delete role
 export const deleteRole = (id: number): Promise<void> => {
-  return request.delete(`/api/v1/role/${id}`);
+  return request.delete(`/role/${id}`);
 };
 
 // Assign menus to role
@@ -77,12 +77,12 @@ export interface AssignMenusRequest {
 }
 
 export const assignMenus = (data: AssignMenusRequest): Promise<void> => {
-  return request.post('/api/v1/role/assign-menus', data);
+  return request.post('/role/assign-menus', data);
 };
 
 // Get role menus
 export const getRoleMenus = (roleId: number): Promise<number[]> => {
-  return request.get(`/api/v1/role/${roleId}/menus`);
+  return request.get(`/role/${roleId}/menus`);
 };
 
 // Assign APIs to role (Casbin policies)
@@ -92,10 +92,10 @@ export interface AssignAPIsRequest {
 }
 
 export const assignAPIs = (data: AssignAPIsRequest): Promise<void> => {
-  return request.post('/api/v1/role/assign-apis', data);
+  return request.post('/role/assign-apis', data);
 };
 
 // Get role APIs
 export const getRoleAPIs = (roleId: number): Promise<string[][]> => {
-  return request.get(`/api/v1/role/${roleId}/apis`);
+  return request.get(`/role/${roleId}/apis`);
 };
