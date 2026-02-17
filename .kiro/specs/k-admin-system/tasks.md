@@ -450,7 +450,7 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Display error notifications for failed responses
     - _Requirements: 11.2, 11.3, 11.4, 11.5_
   
-  - [ ] 15.3 Write property tests for request client
+  - [x] 15.3 Write property tests for request client
     - **Property 32: Authorization Header Injection**
     - **Property 33: Response Data Extraction**
     - **Property 34: Error Notification Display**

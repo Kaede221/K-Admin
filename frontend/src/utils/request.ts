@@ -139,6 +139,7 @@ class RequestClient {
   }
 }
 
-// Export singleton instance
+// Export singleton instance and class
 export const request = new RequestClient();
+export { RequestClient };
 export default request;
