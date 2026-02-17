@@ -305,7 +305,7 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
   
   - [x] 9.9 Configure middleware chain order
     - Update main.go to register middleware in correct order
-    - Order: Recovery → CORS → RateLimit → Logger → JWT → Casbin
+    - Order: Recovery �?CORS �?RateLimit �?Logger �?JWT �?Casbin
     - Implement route exclusion mechanism
     - _Requirements: 16.7, 16.8_
   
@@ -450,13 +450,6 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Display error notifications for failed responses
     - _Requirements: 11.2, 11.3, 11.4, 11.5_
   
-  - [x]* 15.3 Write property tests for request client (OPTIONAL - Frontend testing via manual verification)
-    - **Property 32: Authorization Header Injection**
-    - **Property 33: Response Data Extraction**
-    - **Property 34: Error Notification Display**
-    - **Property 35: Automatic Token Refresh on 401**
-    - **Validates: Requirements 11.2, 11.3, 11.4, 11.5**
-  
   - [x] 15.4 Implement storage utilities
     - Create utils/storage.ts with localStorage helpers
     - Implement getItem, setItem, removeItem with JSON serialization
@@ -483,18 +476,6 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Implement actions: toggleTheme, toggleSidebar, addTab, removeTab, setActiveTab, clearTabs
     - Add persistence for theme and tabs
     - _Requirements: 10.1, 10.2, 10.3_
-  
-  - [ ]* 16.3 Write property test for theme persistence (OPTIONAL - Frontend testing via manual verification)
-    - **Property 29: Theme Preference Persistence**
-    - **Validates: Requirements 10.2**
-  
-  - [ ]* 16.4 Write unit tests for stores (OPTIONAL - Frontend testing via manual verification)
-    - Test user login flow
-    - Test token refresh
-    - Test permission checking
-    - Test theme toggle
-    - Test tab management
-    - _Requirements: 2.4, 10.1, 10.3_
 
 - [x] 17. Implement API layer
   - [x] 17.1 Create User API definitions
@@ -539,17 +520,7 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Support fallback prop for unauthorized state
     - _Requirements: 3.6_
   
-  - [ ]* 19.2 Write property test for AuthButton (OPTIONAL - Frontend testing via manual verification)
-    - **Property 55: AuthButton Permission Visibility**
-    - **Validates: Requirements 3.6**
-  
-  - [ ]* 19.3 Write unit tests for AuthButton (OPTIONAL - Frontend testing via manual verification)
-    - Test button renders with permission
-    - Test button hidden without permission
-    - Test fallback rendering
-    - _Requirements: 3.6_
-  
-  - [ ] 19.4 Create ProTable component
+  - [ ] 19.2 Create ProTable component
     - Create components/ProTable/index.tsx
     - Integrate search form, table, pagination
     - Implement automatic loading state management
@@ -557,49 +528,22 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Support actionRef for external control
     - _Requirements: 11.6_
   
-  - [ ]* 19.5 Write property test for ProTable loading state (OPTIONAL - Frontend testing via manual verification)
-    - **Property 58: Loading State Automation**
-    - **Validates: Requirements 11.6**
-  
-  - [ ]* 19.6 Write unit tests for ProTable (OPTIONAL - Frontend testing via manual verification)
-    - Test table rendering with data
-    - Test pagination
-    - Test search and filtering
-    - Test loading states
-    - _Requirements: 11.6_
-  
-  - [ ] 19.7 Create ThemeSwitch component
+  - [ ] 19.3 Create ThemeSwitch component
     - Create components/Theme/ThemeSwitch.tsx
     - Toggle between light and dark themes
     - Update Ant Design ConfigProvider token
     - Persist theme preference
     - _Requirements: 10.1, 10.2_
-  
-  - [ ]* 19.8 Write unit test for ThemeSwitch (OPTIONAL - Frontend testing via manual verification)
-    - Test theme toggle
-    - Test theme persistence
-    - _Requirements: 10.1, 10.2_
 
 - [ ] 20. Implement dynamic routing system
   - [ ] 20.1 Create route generator utility
     - Create router/generator.ts
-    - Implement generateRoutes function (MenuItem[] → RouteObject[])
+    - Implement generateRoutes function (MenuItem[] �?RouteObject[])
     - Implement loadComponent function (dynamic imports with React.lazy)
     - Handle nested routes recursively
     - _Requirements: 3.3, 9.2, 9.3_
   
-  - [ ]* 20.2 Write property tests for route generation (OPTIONAL - Frontend testing via manual verification)
-    - **Property 6: Route Generation from Menu Tree**
-    - **Property 56: Dynamic Component Loading**
-    - **Validates: Requirements 3.3, 6.7, 9.2, 9.3**
-  
-  - [ ]* 20.3 Write unit tests for route generator (OPTIONAL - Frontend testing via manual verification)
-    - Test route generation from menu tree
-    - Test nested route handling
-    - Test component path mapping
-    - _Requirements: 9.2, 9.3, 9.7_
-  
-  - [ ] 20.4 Create route guards
+  - [ ] 20.2 Create route guards
     - Create router/guards.ts
     - Implement authentication guard (check token)
     - Implement authorization guard (check permissions)
@@ -607,12 +551,7 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Redirect to 403 for unauthorized routes
     - _Requirements: 9.6_
   
-  - [ ]* 20.5 Write unit test for route guards (OPTIONAL - Frontend testing via manual verification)
-    - Test redirect to login when not authenticated
-    - Test redirect to 403 for unauthorized routes
-    - _Requirements: 9.6_
-  
-  - [ ] 20.6 Configure router with static and dynamic routes
+  - [ ] 20.3 Configure router with static and dynamic routes
     - Create router/index.tsx
     - Define static routes: login, 404, 403
     - Fetch menu tree on app load
@@ -628,24 +567,14 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Highlight active menu item
     - _Requirements: 6.5, 9.5_
   
-  - [ ]* 21.2 Write property test for sidebar rendering (OPTIONAL - Frontend testing via manual verification)
-    - **Property 57: Sidebar Navigation Rendering**
-    - **Validates: Requirements 6.5, 9.5**
-  
-  - [ ]* 21.3 Write unit test for Sidebar (OPTIONAL - Frontend testing via manual verification)
-    - Test menu rendering from tree
-    - Test menu item click navigation
-    - Test sidebar collapse
-    - _Requirements: 6.5, 9.5_
-  
-  - [ ] 21.4 Create Header component
+  - [ ] 21.2 Create Header component
     - Create layout/Header/index.tsx
     - Display user info and avatar
     - Add theme switch
     - Add logout button
     - _Requirements: 10.1_
   
-  - [ ] 21.5 Create Tabs component with Keep-Alive
+  - [ ] 21.3 Create Tabs component with Keep-Alive
     - Create layout/Tabs/index.tsx
     - Display visited pages as tabs
     - Implement Keep-Alive using CSS display:none
@@ -653,19 +582,7 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Support tab refresh
     - _Requirements: 10.3, 10.4, 10.5, 10.6, 10.7_
   
-  - [ ]* 21.6 Write property tests for tabs system (OPTIONAL - Frontend testing via manual verification)
-    - **Property 30: Tab State Preservation**
-    - **Property 31: Tab Management Operations**
-    - **Validates: Requirements 10.3, 10.4, 10.5, 10.6, 10.7**
-  
-  - [ ]* 21.7 Write unit tests for Tabs (OPTIONAL - Frontend testing via manual verification)
-    - Test tab creation on navigation
-    - Test tab switching preserves state
-    - Test tab close operations
-    - Test tab refresh
-    - _Requirements: 10.3, 10.4, 10.5, 10.6, 10.7_
-  
-  - [ ] 21.8 Create main Layout component
+  - [ ] 21.4 Create main Layout component
     - Create layout/index.tsx
     - Compose Sidebar, Header, Tabs, and content area
     - Handle responsive layout
@@ -678,15 +595,6 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Display fallback UI with error message
     - Provide reload button
     - Log errors to console/error tracking
-    - _Requirements: 11.9_
-  
-  - [ ]* 22.2 Write property test for Error Boundary (OPTIONAL - Frontend testing via manual verification)
-    - **Property 59: React Error Boundary Catching**
-    - **Validates: Requirements 11.9**
-  
-  - [ ]* 22.3 Write unit test for Error Boundary (OPTIONAL - Frontend testing via manual verification)
-    - Test error catching
-    - Test fallback UI rendering
     - _Requirements: 11.9_
 
 - [ ] 23. Checkpoint - Verify frontend components and routing
@@ -703,12 +611,6 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Call login API and store tokens
     - Redirect to dashboard on success
     - _Requirements: 2.1, 2.4_
-  
-  - [ ]* 24.2 Write unit tests for Login page (OPTIONAL - Frontend testing via manual verification)
-    - Test form validation
-    - Test successful login flow
-    - Test failed login error display
-    - _Requirements: 2.1_
 
 - [ ] 25. Implement Dashboard page
   - [ ] 25.1 Create Dashboard page component
@@ -716,11 +618,6 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Display welcome message and user info
     - Add system statistics cards
     - Add recent activity list
-    - _Requirements: Dashboard feature_
-  
-  - [ ]* 25.2 Write unit test for Dashboard (OPTIONAL - Frontend testing via manual verification)
-    - Test component rendering
-    - Test data fetching
     - _Requirements: Dashboard feature_
 
 - [ ] 26. Implement User Management page
@@ -738,15 +635,6 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Add form validation
     - Support create and edit modes
     - _Requirements: 4.2, 4.3_
-  
-  - [ ]* 26.3 Write unit tests for User Management (OPTIONAL - Frontend testing via manual verification)
-    - Test user list rendering
-    - Test search and filtering
-    - Test user creation
-    - Test user editing
-    - Test user deletion
-    - Test permission-based button visibility
-    - _Requirements: 4.2, 4.3, 4.4, 4.5, 4.6_
 
 - [ ] 27. Implement Role Management page
   - [ ] 27.1 Create Role list page
@@ -767,14 +655,6 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Display API permission list
     - Support assigning menus and APIs to role
     - _Requirements: 5.3, 5.4_
-  
-  - [ ]* 27.4 Write unit tests for Role Management (OPTIONAL - Frontend testing via manual verification)
-    - Test role list rendering
-    - Test role creation
-    - Test role editing
-    - Test role deletion with users
-    - Test permission assignment
-    - _Requirements: 5.2, 5.3, 5.4, 5.5, 5.6_
 
 - [ ] 28. Implement Menu Management page
   - [ ] 28.1 Create Menu list page
@@ -790,14 +670,6 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Add form validation
     - Support parent menu selection
     - _Requirements: 6.2, 6.3, 6.4_
-  
-  - [ ]* 28.3 Write unit tests for Menu Management (OPTIONAL - Frontend testing via manual verification)
-    - Test menu tree rendering
-    - Test menu creation
-    - Test menu editing
-    - Test menu deletion
-    - Test menu sorting
-    - _Requirements: 6.2, 6.5, 6.6_
 
 - [ ] 29. Checkpoint - Verify system management pages
   - Ensure all tests pass, ask the user if questions arise.
@@ -839,20 +711,12 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Display error messages
     - Add confirmation dialog for dangerous operations
     - _Requirements: 7.6, 7.7, 7.8, 7.9_
-  
-  - [ ]* 30.6 Write unit tests for DB Inspector (OPTIONAL - Frontend testing via manual verification)
-    - Test table list rendering
-    - Test schema viewer
-    - Test data browser CRUD operations
-    - Test SQL console execution
-    - Test dangerous operation blocking
-    - _Requirements: 7.2, 7.3, 7.4, 7.5, 7.7, 7.8_
 
 - [ ] 31. Implement Code Generator page
   - [ ] 31.1 Create Code Generator layout
     - Create views/tools/code-generator/index.tsx
     - Design wizard-style interface with steps
-    - Steps: Select Table → Configure → Preview → Generate
+    - Steps: Select Table �?Configure �?Preview �?Generate
     - _Requirements: 8.1, 8.3_
   
   - [ ] 31.2 Create table selection step
@@ -887,14 +751,6 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Field configuration: name, type, nullable, default, comment
     - Call create table API
     - _Requirements: 8.9_
-  
-  - [ ]* 31.7 Write unit tests for Code Generator (OPTIONAL - Frontend testing via manual verification)
-    - Test table selection
-    - Test configuration form
-    - Test code preview
-    - Test code generation
-    - Test table creation
-    - _Requirements: 8.1, 8.2, 8.3, 8.4, 8.5, 8.8, 8.9_
 
 - [ ] 32. Checkpoint - Verify developer tools pages
   - Ensure all tests pass, ask the user if questions arise.
@@ -913,11 +769,6 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Create views/error/403.tsx
     - Display permission denied message
     - Add button to return to home
-    - _Requirements: 9.6_
-  
-  - [ ]* 33.3 Write unit tests for error pages (OPTIONAL - Frontend testing via manual verification)
-    - Test 404 page rendering
-    - Test 403 page rendering
     - _Requirements: 9.6_
 
 - [ ] 34. Configure environment and build
@@ -963,12 +814,6 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Set up volume mounts for persistent data
     - Configure service dependencies and networking
     - _Requirements: 17.3, 17.4, 17.7_
-  
-  - [ ]* 35.4 Write unit tests for deployment configuration (OPTIONAL - Frontend testing via manual verification)
-    - Test that backend exposes port 8080
-    - Test that frontend exposes port 80
-    - Test health check endpoints
-    - _Requirements: 17.5, 17.6_
 
 - [ ] 36. Create health check endpoints
   - [ ] 36.1 Implement backend health check
@@ -976,11 +821,6 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Check database connectivity
     - Check Redis connectivity
     - Return health status JSON
-    - _Requirements: 17.6_
-  
-  - [ ]* 36.2 Write unit test for health check (OPTIONAL - Backend testing, can be manual)
-    - Test health endpoint returns 200
-    - Test health status includes database and Redis status
     - _Requirements: 17.6_
 
 - [ ] 37. Write project documentation
@@ -1014,7 +854,7 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - _Requirements: All testing requirements_
   
   - [ ] 38.2 Perform end-to-end integration tests
-    - Test complete user flows: login → navigate → CRUD operations
+    - Test complete user flows: login �?navigate �?CRUD operations
     - Test permission system: menu filtering, API authorization, button visibility
     - Test token refresh flow
     - Test DB Inspector operations
@@ -1033,11 +873,11 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
 
 ## Notes
 
-- Tasks marked with `*` are optional testing tasks and can be skipped for faster MVP
+
 - Each task references specific requirements for traceability
 - Checkpoints ensure incremental validation at major milestones
 - Property tests validate universal correctness properties with minimum 100 iterations
 - Unit tests validate specific examples, edge cases, and error conditions
-- The implementation follows a bottom-up approach: infrastructure → core modules → advanced features → frontend → integration
+- The implementation follows a bottom-up approach: infrastructure �?core modules �?advanced features �?frontend �?integration
 - Backend and frontend can be developed in parallel after Phase 1 is complete
 - Code Generator templates should follow project conventions established in earlier phases
