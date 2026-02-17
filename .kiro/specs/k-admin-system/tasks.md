@@ -39,7 +39,7 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - **Validates: Requirements 13.3, 13.7, 13.8**
 
 
-- [ ] 2. Set up database connection and base models
+- [x] 2. Set up database connection and base models
   - [x] 2.1 Implement database connection with Gorm
     - Create core/gorm.go for database initialization
     - Configure connection pooling and reconnection logic
@@ -58,7 +58,7 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Implement response helper functions (Ok, Fail, OkWithDetailed, FailWithCode)
     - _Requirements: 1.1, 1.4, 15.6_
   
-  - [ ] 2.4 Write property test for unified response structure
+  - [x] 2.4 Write property test for unified response structure
     - **Property 1: Unified Response Structure**
     - **Validates: Requirements 1.1, 1.2, 1.3**
   
@@ -67,11 +67,11 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Add migration tracking
     - _Requirements: 15.5_
   
-  - [ ] 2.6 Write property test for database migrations
+  - [x] 2.6 Write property test for database migrations
     - **Property 46: Database Migration Execution**
     - **Validates: Requirements 15.5**
 
-- [ ] 3. Implement authentication and JWT management
+- [x] 3. Implement authentication and JWT management
   - [x] 3.1 Create JWT utility functions
     - Define utils/jwt.go with JWTClaims struct
     - Implement GenerateToken (access + refresh tokens)
@@ -79,7 +79,7 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Implement token blacklist functions using Redis
     - _Requirements: 2.1, 2.5, 2.7_
   
-  - [ ] 3.2 Write property tests for JWT functionality
+  - [x] 3.2 Write property tests for JWT functionality
     - **Property 3: Token Generation and Refresh Cycle**
     - **Property 4: Token Blacklist Enforcement**
     - **Validates: Requirements 2.1, 2.5, 2.7**
@@ -89,7 +89,7 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Implement HashPassword and CheckPassword
     - _Requirements: 2.2_
   
-  - [ ] 3.4 Write property test for password encryption
+  - [x] 3.4 Write property test for password encryption
     - **Property 2: Password Encryption Round-Trip**
     - **Validates: Requirements 2.2**
   
@@ -100,11 +100,11 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Handle token expiration and blacklist checking
     - _Requirements: 2.3, 16.1_
   
-  - [ ] 3.6 Write property test for JWT middleware
+  - [x] 3.6 Write property test for JWT middleware
     - **Property 49: JWT Middleware Token Validation**
     - **Validates: Requirements 16.1**
 
-- [ ] 4. Checkpoint - Verify core infrastructure
+- [x] 4. Checkpoint - Verify core infrastructure
   - Ensure all tests pass, ask the user if questions arise.
 
 
