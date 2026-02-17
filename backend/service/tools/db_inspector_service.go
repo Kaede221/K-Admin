@@ -56,13 +56,13 @@ func (s *DBInspectorService) GetTables() ([]string, error) {
 }
 
 // GetTableSchema 获取表结构
-func (s *DBInspectorService) GetTableSchema(tableName string) ([]ColumnInfo, error) {
+func (s *DBInspectorService) GetTableSchema(tableName string) ([]CodeGenColumnInfo, error) {
 	// 验证表名（防止SQL注入）
 	if !isValidTableName(tableName) {
 		return nil, errors.New("invalid table name")
 	}
 
-	var columns []ColumnInfo
+	var columns []CodeGenColumnInfo
 
 	// 检测数据库类型
 	dbType := global.DB.Dialector.Name()
@@ -94,7 +94,7 @@ func (s *DBInspectorService) GetTableSchema(tableName string) ([]ColumnInfo, err
 			if col.PK > 0 {
 				key = "PRI"
 			}
-			columns = append(columns, ColumnInfo{
+			columns = append(columns, CodeGenColumnInfo{
 				Name:     col.Name,
 				Type:     col.Type,
 				Nullable: col.NotNull == 0,

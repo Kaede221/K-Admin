@@ -362,7 +362,7 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - _Requirements: 2.3, 3.4_
 
 - [ ] 12. Implement Code Generator module
-  - [ ] 12.1 Create code generation templates
+  - [x] 12.1 Create code generation templates
     - Create resource/template/backend/model.tpl (Gorm model struct)
     - Create resource/template/backend/service.tpl (CRUD service methods)
     - Create resource/template/backend/api.tpl (Gin controller handlers)
@@ -373,7 +373,7 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Create resource/template/frontend/modal.tpl (form modal component)
     - _Requirements: 8.6, 8.7_
   
-  - [ ] 12.2 Implement Code Generator service layer
+  - [x] 12.2 Implement Code Generator service layer
     - Create service/tools/code_generator_service.go
     - Implement GetTableMetadata (extract columns, types, constraints)
     - Implement GenerateCode (apply templates, return file map)
@@ -382,7 +382,7 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Implement CreateTable (create table from field definitions)
     - _Requirements: 8.2, 8.4, 8.5, 8.8, 8.9_
   
-  - [ ] 12.3 Write property tests for Code Generator
+  - [x] 12.3 Write property tests for Code Generator
     - **Property 24: Code Generator Metadata Extraction**
     - **Property 25: Backend Code Generation Completeness**
     - **Property 26: Frontend Code Generation Completeness**
