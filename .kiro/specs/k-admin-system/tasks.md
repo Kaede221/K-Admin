@@ -432,15 +432,15 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
 
 ### Phase 4: Frontend Foundation
 
-- [ ] 15. Set up frontend project structure and core utilities
-  - [ ] 15.1 Initialize frontend project structure
+- [-] 15. Set up frontend project structure and core utilities
+  - [x] 15.1 Initialize frontend project structure
     - Verify Vite + React + TypeScript setup
     - Create directory structure: api, assets, components, hooks, layout, router, store, utils, views
     - Install dependencies: axios, zustand, react-router-dom, antd, dayjs, lodash
     - Configure TypeScript paths in tsconfig.json
     - _Requirements: Frontend architecture from PRD_
   
-  - [ ] 15.2 Implement request client with Axios
+  - [x] 15.2 Implement request client with Axios
     - Create utils/request.ts with RequestClient class
     - Define UnifiedResponse interface
     - Implement request/response interceptors
@@ -457,27 +457,27 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - **Property 35: Automatic Token Refresh on 401**
     - **Validates: Requirements 11.2, 11.3, 11.4, 11.5**
   
-  - [ ] 15.4 Implement storage utilities
+  - [x] 15.4 Implement storage utilities
     - Create utils/storage.ts with localStorage helpers
     - Implement getItem, setItem, removeItem with JSON serialization
     - Add type-safe wrappers for common keys (token, user, theme)
     - _Requirements: 10.2_
   
-  - [ ] 15.5 Implement common utility functions
+  - [x] 15.5 Implement common utility functions
     - Create utils/format.ts for date/number formatting
     - Create utils/validator.ts for form validation rules
     - Create utils/helper.ts for common operations
     - _Requirements: General utilities_
 
-- [ ] 16. Implement state management with Zustand
-  - [ ] 16.1 Create User store
+- [-] 16. Implement state management with Zustand
+  - [x] 16.1 Create User store
     - Create store/userStore.ts with UserState interface
     - Implement state: userInfo, accessToken, refreshToken, permissions, menuTree
     - Implement actions: login, logout, refreshAccessToken, fetchUserMenu, hasPermission, updateUserInfo
     - Add persistence for tokens and userInfo
     - _Requirements: 2.4, 3.2, 9.1_
   
-  - [ ] 16.2 Create App store
+  - [x] 16.2 Create App store
     - Create store/appStore.ts with AppState interface
     - Implement state: theme, collapsed, tabs, activeTab
     - Implement actions: toggleTheme, toggleSidebar, addTab, removeTab, setActiveTab, clearTabs
