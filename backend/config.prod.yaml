@@ -1,0 +1,57 @@
+server:
+  port: ":8080"
+  mode: "release" # debug, release, test
+
+database:
+  host: "${DB_HOST:mysql}"
+  port: 3306
+  name: "${DB_NAME:k_admin}"
+  username: "${DB_USER:root}"
+  password: "${DB_PASSWORD:password}"
+  max_idle_conns: 10
+  max_open_conns: 100
+
+jwt:
+  secret: "${JWT_SECRET:your-secret-key-change-this-in-production}"
+  access_expiration: 15  # minutes
+  refresh_expiration: 7  # days
+
+redis:
+  host: "${REDIS_HOST:redis}"
+  port: 6379
+  password: "${REDIS_PASSWORD:}"
+  db: 0
+
+logger:
+  level: "info"  # debug, info, warn, error, fatal
+  path: "./logs/app.log"
+  max_size: 100  # megabytes
+  max_age: 30    # days
+  max_backups: 10
+  compress: true
+
+cors:
+  allow_origins:
+    - "${CORS_ORIGIN:https://yourdomain.com}"
+  allow_methods:
+    - "GET"
+    - "POST"
+    - "PUT"
+    - "DELETE"
+    - "OPTIONS"
+    - "PATCH"
+  allow_headers:
+    - "Origin"
+    - "Content-Type"
+    - "Authorization"
+    - "Accept"
+  expose_headers:
+    - "X-Total-Count"
+  allow_credentials: true
+  max_age: 86400  # 24 hours in seconds
+
+rate_limit:
+  enabled: true
+  requests: 100   # number of requests allowed
+  window: 60      # time window in seconds
+  key_func: "ip"  # "ip" or "user" - how to identify clients

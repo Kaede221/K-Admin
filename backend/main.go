@@ -111,12 +111,7 @@ func main() {
 	r.Use(middleware.Logger())
 
 	// Health check endpoint (excluded from JWT and Casbin)
-	r.GET("/health", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"status": "ok",
-			"mode":   cfg.Server.Mode,
-		})
-	})
+	r.GET("/api/v1/health", systemApi.HealthCheck)
 
 	// API v1 routes
 	apiV1 := r.Group("/api/v1")
