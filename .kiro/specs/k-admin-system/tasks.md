@@ -111,13 +111,13 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
 ### Phase 2: Core System Modules
 
 - [ ] 5. Implement User module (model, service, API, router)
-  - [ ] 5.1 Create User model and database table
+  - [x] 5.1 Create User model and database table
     - Define model/system/sys_user.go with SysUser struct
     - Include fields: username, password, nickname, header_img, phone, email, role_id, active
     - Add Gorm tags and JSON tags (exclude password from JSON)
     - _Requirements: 4.1, 4.7_
   
-  - [ ] 5.2 Implement User service layer
+  - [x] 5.2 Implement User service layer
     - Create service/system/user_service.go
     - Implement Login (validate credentials, generate tokens)
     - Implement CreateUser, UpdateUser, DeleteUser (soft delete), GetUserByID
@@ -125,7 +125,7 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - Implement ChangePassword, ResetPassword, ToggleUserStatus
     - _Requirements: 4.2, 4.3, 4.4, 4.5, 4.6, 4.8_
   
-  - [ ] 5.3 Write property tests for User service
+  - [x] 5.3 Write property tests for User service
     - **Property 9: User CRUD Consistency**
     - **Property 10: Password Field Masking**
     - **Property 11: Username Uniqueness Validation**
@@ -133,21 +133,21 @@ The backend uses Go with Gin framework, Gorm ORM, and MySQL database. The fronte
     - **Property 47: Soft Delete Behavior**
     - **Validates: Requirements 4.2, 4.3, 4.4, 4.5, 4.6, 4.7, 4.8, 15.7**
   
-  - [ ] 5.4 Create User API controllers
+  - [x] 5.4 Create User API controllers
     - Create api/v1/system/user.go
     - Implement handlers: Login, CreateUser, UpdateUser, DeleteUser, GetUser, GetUserList
     - Implement ChangePassword, ResetPassword, ToggleStatus
     - Add Swagger annotations
     - _Requirements: 4.2, 4.3, 4.4, 4.5, 4.6, 14.3_
   
-  - [ ] 5.5 Write unit tests for User API
+  - [x] 5.5 Write unit tests for User API
     - Test login with valid/invalid credentials
     - Test user creation with duplicate username
     - Test password masking in responses
     - Test pagination and filtering
     - _Requirements: 4.2, 4.6, 4.7, 4.8_
   
-  - [ ] 5.6 Register User routes
+  - [x] 5.6 Register User routes
     - Create router/system/user.go
     - Register routes with appropriate middleware
     - Public routes: /login

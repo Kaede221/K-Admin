@@ -7,6 +7,7 @@ import (
 	"k-admin-system/config"
 	"k-admin-system/core"
 	"k-admin-system/global"
+	systemRouter "k-admin-system/router/system"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -69,6 +70,13 @@ func main() {
 			"mode":   cfg.Server.Mode,
 		})
 	})
+
+	// API v1 routes
+	apiV1 := r.Group("/api/v1")
+	{
+		// System module routes
+		systemRouter.InitUserRouter(apiV1)
+	}
 
 	// Start server
 	logger.Info("Server starting", zap.String("port", cfg.Server.Port))
