@@ -1,17 +1,40 @@
 package main
 
+// @title K-Admin System API
+// @version 1.0
+// @description K-Admin 后台管理系统 API 文档
+// @termsOfService http://swagger.io/terms/
+
+// @contact.name API Support
+// @contact.url http://www.swagger.io/support
+// @contact.email support@swagger.io
+
+// @license.name Apache 2.0
+// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host localhost:8080
+// @BasePath /api/v1
+
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
+// @description JWT token format: Bearer {token}
+
 import (
 	"flag"
 	"log"
 
 	"k-admin-system/config"
 	"k-admin-system/core"
+	_ "k-admin-system/docs" // Swagger docs
 	"k-admin-system/global"
 	"k-admin-system/middleware"
 	systemRouter "k-admin-system/router/system"
 	toolsRouter "k-admin-system/router/tools"
 
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 	"go.uber.org/zap"
 )
 
@@ -106,7 +129,11 @@ func main() {
 		// Tools module routes
 		toolsGroup := apiV1.Group("/tools")
 		toolsRouter.InitDBInspectorRouter(toolsGroup)
+		toolsRouter.InitCodeGeneratorRouter(toolsGroup)
 	}
+
+	// Swagger documentation route
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	// Start server
 	logger.Info("Server starting", zap.String("port", cfg.Server.Port))
