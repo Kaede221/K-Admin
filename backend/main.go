@@ -7,6 +7,7 @@ import (
 	"k-admin-system/config"
 	"k-admin-system/core"
 	"k-admin-system/global"
+	"k-admin-system/middleware"
 	systemRouter "k-admin-system/router/system"
 
 	"github.com/gin-gonic/gin"
@@ -67,10 +68,25 @@ func main() {
 	// Set Gin mode based on configuration
 	gin.SetMode(cfg.Server.Mode)
 
-	// Initialize Gin router
-	r := gin.Default()
+	// Initialize Gin router without default middleware
+	r := gin.New()
 
-	// Health check endpoint
+	// Configure middleware chain in correct order
+	// Order: Recovery → CORS → RateLimit → Logger → JWT → Casbin
+
+	// 1. Recovery middleware (must be first to catch all panics)
+	r.Use(middleware.Recovery())
+
+	// 2. CORS middleware (handle cross-origin requests early)
+	r.Use(middleware.CORS(cfg.CORS))
+
+	// 3. Rate limiting middleware (prevent abuse before processing)
+	r.Use(middleware.RateLimit(cfg.RateLimit))
+
+	// 4. Logger middleware (log all requests)
+	r.Use(middleware.Logger())
+
+	// Health check endpoint (excluded from JWT and Casbin)
 	r.GET("/health", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"status": "ok",

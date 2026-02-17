@@ -1,6 +1,7 @@
 package system
 
 import (
+	"encoding/json"
 	"fmt"
 	"testing"
 
@@ -241,13 +242,34 @@ func TestProperty10_PasswordFieldMasking(t *testing.T) {
 				return false
 			}
 
-			// Verify password field is not the plain text password
-			if retrievedUser.Password == password {
-				t.Logf("Password field contains plain text password")
+			// Serialize to JSON to verify password is masked
+			jsonData, err := json.Marshal(retrievedUser)
+			if err != nil {
+				t.Logf("Failed to marshal user to JSON: %v", err)
 				return false
 			}
 
-			// Verify the password is actually hashed (bcrypt hashes are 60 chars)
+			// Parse JSON to check if password field exists
+			var jsonMap map[string]interface{}
+			err = json.Unmarshal(jsonData, &jsonMap)
+			if err != nil {
+				t.Logf("Failed to unmarshal JSON: %v", err)
+				return false
+			}
+
+			// Verify password field is not in JSON output
+			if _, hasPassword := jsonMap["password"]; hasPassword {
+				t.Logf("Password field is present in JSON output")
+				return false
+			}
+
+			// Verify password field is not in JSON output (case variations)
+			if _, hasPassword := jsonMap["Password"]; hasPassword {
+				t.Logf("Password field (capitalized) is present in JSON output")
+				return false
+			}
+
+			// Verify the password is actually hashed in the database (bcrypt hashes are 60 chars)
 			if len(retrievedUser.Password) != 60 {
 				t.Logf("Password is not properly hashed (expected 60 chars, got %d)", len(retrievedUser.Password))
 				return false
@@ -256,11 +278,13 @@ func TestProperty10_PasswordFieldMasking(t *testing.T) {
 			return true
 		},
 		genUsername(),
-		gen.AlphaString().SuchThat(func(s string) bool {
-			return len(s) >= 1 && len(s) <= 72
-		}).Map(func(s string) string {
-			if s == "" {
-				return "password"
+		gen.AlphaString().Map(func(s string) string {
+			// Ensure password is between 1-72 chars (bcrypt limit)
+			if len(s) == 0 {
+				return "password123"
+			}
+			if len(s) > 72 {
+				return s[:72]
 			}
 			return s
 		}),

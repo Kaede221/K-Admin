@@ -14,6 +14,7 @@ func InitMenuRouter(router *gin.RouterGroup) {
 	// 受保护的路由（需要JWT认证）
 	protectedGroup := router.Group("/menu")
 	protectedGroup.Use(middleware.JWTAuth())
+	protectedGroup.Use(middleware.CasbinAuth())
 	{
 		// 菜单CRUD操作
 		protectedGroup.POST("", menuApi.CreateMenu)

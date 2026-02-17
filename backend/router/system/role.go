@@ -14,8 +14,7 @@ func InitRoleRouter(router *gin.RouterGroup) {
 	// 受保护的路由（需要JWT认证和管理员权限）
 	protectedGroup := router.Group("/role")
 	protectedGroup.Use(middleware.JWTAuth())
-	// TODO: 在Task 8实现Casbin后，添加管理员权限检查中间件
-	// protectedGroup.Use(middleware.CasbinAuth())
+	protectedGroup.Use(middleware.CasbinAuth())
 	{
 		// 角色CRUD操作
 		protectedGroup.POST("", roleApi.CreateRole)
