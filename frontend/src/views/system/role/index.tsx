@@ -126,7 +126,7 @@ export function RoleManagement() {
       render: (_, record) => (
         <Space>
           <AuthButton
-            perm="role:edit"
+            perm="role:update"
             type="link"
             size="small"
             icon={<EditOutlined />}
@@ -145,7 +145,7 @@ export function RoleManagement() {
             删除
           </AuthButton>
           <AuthButton
-            perm="role:assign-permissions"
+            perm="role:update"
             type="link"
             size="small"
             icon={<SafetyOutlined />}

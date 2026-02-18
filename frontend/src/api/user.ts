@@ -54,16 +54,18 @@ export const createUser = (data: CreateUserRequest): Promise<UserInfo> => {
 // Update user
 export interface UpdateUserRequest {
   id: number;
+  username: string;
+  password?: string;
   nickname?: string;
   phone?: string;
   email?: string;
-  roleId?: number;
+  roleId: number;
   headerImg?: string;
-  active?: boolean;
+  active: boolean;
 }
 
 export const updateUser = (data: UpdateUserRequest): Promise<UserInfo> => {
-  return request.put(`/user/${data.id}`, data);
+  return request.put('/user', data);
 };
 
 // Delete user

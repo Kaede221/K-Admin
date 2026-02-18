@@ -156,7 +156,7 @@ export function UserManagement() {
       render: (_, record) => (
         <Space>
           <AuthButton
-            perm="user:edit"
+            perm="user:update"
             type="link"
             size="small"
             icon={<EditOutlined />}
@@ -175,7 +175,7 @@ export function UserManagement() {
             删除
           </AuthButton>
           <AuthButton
-            perm="user:reset-password"
+            perm="user:update"
             type="link"
             size="small"
             icon={<KeyOutlined />}
@@ -184,7 +184,7 @@ export function UserManagement() {
             重置密码
           </AuthButton>
           <AuthButton
-            perm="user:toggle-status"
+            perm="user:update"
             type="link"
             size="small"
             icon={<PoweroffOutlined />}

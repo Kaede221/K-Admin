@@ -1,8 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Modal, Form, Input, Select, Upload, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import type { UploadFile } from 'antd';
 import { createUser, updateUser } from '@/api/user';
+import { getRoleList, type RoleInfo } from '@/api/role';
 import type { UserInfo } from '@/types/user';
 
 interface UserModalProps {
@@ -14,7 +15,22 @@ interface UserModalProps {
 
 export function UserModal({ visible, user, onSuccess, onCancel }: UserModalProps) {
   const [form] = Form.useForm();
+  const [roleList, setRoleList] = useState<RoleInfo[]>([]);
+  const [loading, setLoading] = useState(false);
   const isEdit = !!user;
+
+  // Load role list
+  useEffect(() => {
+    const loadRoles = async () => {
+      try {
+        const result = await getRoleList({ page: 1, pageSize: 100 });
+        setRoleList(result.list);
+      } catch (error) {
+        console.error('Failed to load roles:', error);
+      }
+    };
+    loadRoles();
+  }, []);
 
   useEffect(() => {
     if (visible) {
@@ -37,12 +53,19 @@ export function UserModal({ visible, user, onSuccess, onCancel }: UserModalProps
 
   const handleSubmit = async () => {
     try {
+      setLoading(true);
       const values = await form.validateFields();
+      
+      // Remove password field if it's empty in edit mode
+      if (isEdit && !values.password) {
+        delete values.password;
+      }
       
       if (isEdit) {
         // Update existing user
         await updateUser({
           id: user.id,
+          username: user.username, // Username cannot be changed
           ...values,
         });
         message.success('用户更新成功');
@@ -59,6 +82,8 @@ export function UserModal({ visible, user, onSuccess, onCancel }: UserModalProps
         return;
       }
       message.error(isEdit ? '用户更新失败' : '用户创建失败');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -68,6 +93,7 @@ export function UserModal({ visible, user, onSuccess, onCancel }: UserModalProps
       open={visible}
       onOk={handleSubmit}
       onCancel={onCancel}
+      confirmLoading={loading}
       width={600}
       destroyOnClose
     >
@@ -90,18 +116,16 @@ export function UserModal({ visible, user, onSuccess, onCancel }: UserModalProps
           <Input placeholder="请输入用户名" disabled={isEdit} />
         </Form.Item>
 
-        {!isEdit && (
-          <Form.Item
-            label="密码"
-            name="password"
-            rules={[
-              { required: true, message: '请输入密码' },
-              { min: 6, message: '密码长度至少为 6 个字符' },
-            ]}
-          >
-            <Input.Password placeholder="请输入密码" />
-          </Form.Item>
-        )}
+        <Form.Item
+          label={isEdit ? '密码（留空则不修改）' : '密码'}
+          name="password"
+          rules={[
+            { required: !isEdit, message: '请输入密码' },
+            { min: 6, message: '密码长度至少为 6 个字符' },
+          ]}
+        >
+          <Input.Password placeholder={isEdit ? '留空则不修改密码' : '请输入密码'} />
+        </Form.Item>
 
         <Form.Item
           label="昵称"
@@ -137,10 +161,12 @@ export function UserModal({ visible, user, onSuccess, onCancel }: UserModalProps
           name="roleId"
           rules={[{ required: true, message: '请选择角色' }]}
         >
-          <Select placeholder="请选择角色">
-            {/* TODO: Load roles dynamically from API */}
-            <Select.Option value={1}>管理员</Select.Option>
-            <Select.Option value={2}>普通用户</Select.Option>
+          <Select placeholder="请选择角色" loading={roleList.length === 0}>
+            {roleList.map((role) => (
+              <Select.Option key={role.id} value={role.id}>
+                {role.roleName}
+              </Select.Option>
+            ))}
           </Select>
         </Form.Item>
 

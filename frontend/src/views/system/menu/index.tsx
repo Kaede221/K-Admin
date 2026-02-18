@@ -121,7 +121,7 @@ export function MenuManagement() {
       render: (_, record) => (
         <Space>
           <AuthButton
-            perm="menu:edit"
+            perm="menu:update"
             type="link"
             size="small"
             icon={<EditOutlined />}
