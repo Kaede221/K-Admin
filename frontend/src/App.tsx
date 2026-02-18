@@ -1,5 +1,5 @@
 import { RouterProvider } from 'react-router-dom';
-import { ConfigProvider, App as AntApp, Spin } from 'antd';
+import { ConfigProvider, App as AntApp, Spin, message } from 'antd';
 import zhCN from 'antd/locale/zh_CN';
 import { createAppRouter } from './router';
 import { useUserStore } from './store/userStore';
@@ -11,7 +11,9 @@ const App = () => {
   const menuTree = useUserStore((state) => state.menuTree);
   const accessToken = useUserStore((state) => state.accessToken);
   const fetchUserMenu = useUserStore((state) => state.fetchUserMenu);
+  const logout = useUserStore((state) => state.logout);
   const [isMenuLoading, setIsMenuLoading] = useState(false);
+  const [messageApi, contextHolder] = message.useMessage();
   
   // Fetch menu on mount if user is logged in but menu is empty
   useEffect(() => {
@@ -20,12 +22,18 @@ const App = () => {
       fetchUserMenu()
         .catch((error) => {
           console.error('Failed to fetch user menu:', error);
+          
+          // Check if token expired
+          if (error.message && error.message.includes('令牌已过期')) {
+            messageApi.error('登录已过期，请重新登录');
+            logout();
+          }
         })
         .finally(() => {
           setIsMenuLoading(false);
         });
     }
-  }, [accessToken, fetchUserMenu]);
+  }, [accessToken, fetchUserMenu, logout, messageApi]);
 
   // Recreate router when menuTree changes
   const router = useMemo(() => createAppRouter(), [menuTree]);
@@ -64,6 +72,7 @@ const App = () => {
         }}
       >
         <AntApp>
+          {contextHolder}
           <RouterProvider router={router} />
         </AntApp>
       </ConfigProvider>

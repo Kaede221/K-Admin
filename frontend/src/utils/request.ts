@@ -6,6 +6,7 @@ import axios, {
 } from "axios";
 import { getToken, setToken, getRefreshToken, removeToken, removeRefreshToken } from "./storage";
 import { navigateTo } from "./navigation";
+import { message } from "antd";
 
 export interface UnifiedResponse<T = any> {
   code: number;
@@ -120,6 +121,7 @@ class RequestClient {
       // Refresh failed, redirect to login
       removeToken();
       removeRefreshToken();
+      message.error("登录已过期，请重新登录");
       navigateTo("/login");
       return Promise.reject(refreshError);
     } finally {
